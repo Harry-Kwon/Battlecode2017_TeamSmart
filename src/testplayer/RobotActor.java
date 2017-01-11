@@ -37,6 +37,10 @@ public class RobotActor {
 		allTrees = rc.senseNearbyTrees();
 	}
 	
+	/*boolean robotIsSurrounded(RobotInfo r) {
+		
+	}*/
+	
 	//Nav Code
 	
 	MapLocation findTargetLocation() {
