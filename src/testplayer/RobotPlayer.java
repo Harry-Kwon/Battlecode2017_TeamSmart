@@ -15,10 +15,10 @@ public class RobotPlayer {
                 case GARDENER:
                     actor = new GardenerActor(rc);
                     break;
-                /*case LUMBERJACK:
-                    actor = new MobileTurretActor(rc);
+                case LUMBERJACK:
+                    actor = new LumberjackActor(rc);
                     break;
-                case SCOUT:
+                /*case SCOUT:
                 	actor = new MobileTurretActor(rc);
                 	break;
                 case SOLDIER:

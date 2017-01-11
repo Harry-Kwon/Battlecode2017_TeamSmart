@@ -26,7 +26,6 @@ public class GardenerActor extends RobotActor {
 				anchored = true;
 				//System.out.println("Anchoring " + rc.getID());
 			} else {
-				senseAll();
 				MapLocation target = findTargetLocation();
 				moveToLocation(target);
 			}
@@ -40,13 +39,35 @@ public class GardenerActor extends RobotActor {
 	}
 	
 	boolean buildUnits() {
-		Direction dir = Direction.getEast().rotateLeftDegrees(60f);
+		//sense for nearby trees
+		/*boolean hasTree=false, hasEnemy=false;
+		for(TreeInfo ti : allTrees) {
+			if(!ti.team.equals(rc.getTeam())) {
+				hasTree = true;
+				break;
+			}
+		}
 		
-		if(rc.canBuildRobot(RobotType.LUMBERJACK, dir)) {
-			try{
-				rc.buildRobot(RobotType.LUMBERJACK, dir);
-				return true;
-			} catch(Exception e) {e.printStackTrace();};
+		for(RobotInfo ri : allRobots) {
+			if(!ri.team.equals(rc.getTeam())) {
+				hasEnemy = true;
+				break;
+			}
+		}
+		
+		if(!(hasTree || hasEnemy)) {
+			return false;
+		}*/
+		
+		Direction dir = Direction.getEast().rotateRightDegrees(60f);
+		
+		if(rc.getRoundNum()%25==0 || rc.getTeamBullets() >150f) {
+			if(rc.canBuildRobot(RobotType.LUMBERJACK, dir)) {
+				try{
+					rc.buildRobot(RobotType.LUMBERJACK, dir);
+					return true;
+				} catch(Exception e) {e.printStackTrace();};
+			}
 		}
 		return false;
 	}
@@ -58,7 +79,7 @@ public class GardenerActor extends RobotActor {
 		boolean planted = false;
 		float rotationStep = 60f;
 		
-		for(int i=0; i<((int) 360f/rotationStep) -1; i++){
+		for(int i=0; i<((int) 360f/rotationStep)-1; i++){
 			
 			if(rc.canPlantTree(dir)) {
 				try{ 
@@ -112,18 +133,14 @@ public class GardenerActor extends RobotActor {
 			smallRobots = rc.senseNearbyRobots(4.1f);
 			smallTrees = rc.senseNearbyTrees(6.1f);
 			
-			System.out.println(smallRobots.length + smallTrees.length);
-			
 			for(RobotInfo ri : smallRobots) {
 				if(ri.type.equals(RobotType.ARCHON)) {
-					System.out.println(false);
 					return false;
 				}
 			}
 			
 			for(TreeInfo ti : smallTrees) {
 				if(!ti.team.equals(Team.NEUTRAL)) {
-					System.out.println(false);
 					return false;
 				}
 			}

@@ -43,7 +43,7 @@ public class RobotActor {
 		Direction angle = findTargetAngle();
 		MapLocation target = findTargetLocation(angle);
 		
-		System.out.println(target);
+		//System.out.println(target);
 		return target;
 	}
 	
@@ -73,7 +73,7 @@ public class RobotActor {
 	Direction findTargetAngle() {
 		Direction angle = Direction.getWest();
 		float rad = sensorRange/2f;
-		System.out.println("RAD" + rad);
+		//System.out.println("RAD" + rad);
 		float scope = 90f;
 		
 		for(int i=0; i<8; i++) {
@@ -96,14 +96,14 @@ public class RobotActor {
 			scope/=2f;
 		}
 		
-		System.out.println(angle.getAngleDegrees());
+		//System.out.println(angle.getAngleDegrees());
 		return angle;
 	}
 	
 	float getFitnessScore(MapLocation l) {
 		try{
 			if(rc.canSenseLocation(l) && !rc.onTheMap(l)) {
-				System.out.println("dead square");
+				//System.out.println("dead square");
 				return -999999.0f;
 			}
 		} catch(Exception e){e.printStackTrace();}
@@ -127,6 +127,9 @@ public class RobotActor {
 	
 	//binary search-ish, 4 iterations for now (360/2^4 = 22.5)
 	public void moveToLocation(MapLocation l) {
+		if(rc.hasMoved()) {
+			return;
+		}
 		if(rc.canMove(l)) {
 			try{
 				rc.move(l);
