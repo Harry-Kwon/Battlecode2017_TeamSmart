@@ -4,7 +4,7 @@ import battlecode.common.*;
 
 public class ArchonActor extends RobotActor {
 
-	float rotationStep=90f;
+	float rotationStep=10f;
 	
 	public ArchonActor(RobotController rc) {
 		super(rc);

@@ -1,6 +1,7 @@
 package testplayer;
 
 import battlecode.common.*;
+import java.math.*;
 
 public class GardenerActor extends RobotActor {
 	
@@ -24,15 +25,64 @@ public class GardenerActor extends RobotActor {
 			if(senseNearbyObjects() == 0) {
 				anchorLocation = loc;
 				anchored = true;
-				System.out.println("Anchoring " + rc.getID());
+				//System.out.println("Anchoring " + rc.getID());
 			} else {
-				moveFromLocation(nearestLocation);
+				spreadout();
 			}
 		} else {
 			if(!plantTrees()) {
 				waterTrees();
 			}
 		}
+	}
+	
+	void spreadout() {
+		RobotInfo[] robots = rc.senseNearbyRobots();
+		TreeInfo[] trees = rc.senseNearbyTrees();
+		
+		float[] dirVector = {0, 0};
+		
+		for(RobotInfo ri : robots) {
+			float dx = loc.x - ri.location.x;
+			float dy = loc.y - ri.location.y;
+			float mod = 1f;
+			if(ri.type.equals(RobotType.ARCHON)) {
+				mod = 2;
+			}
+			
+			if(dx != 0f) {
+				if(dx<0f) { //there must be an easier way. dx/Math.abs(dx) doesn't work?
+					dirVector[0] += -1*(10-Math.abs(dx))*mod;
+				} else {
+					dirVector[0] += (10-Math.abs(dx))*mod;
+				}
+			}
+			if(dy != 0f) {
+				if(dy <0f) {
+					dirVector[1] += dy/Math.abs(dy)*(10-Math.abs(dy))*mod;
+				}
+			}
+		}
+		
+		for(TreeInfo ti : trees) {
+			float dx = loc.x - ti.location.x;
+			float dy = loc.y - ti.location.y;
+			float mod = 0f;
+			if(ti.team.equals(Team.NEUTRAL)) {
+				mod = 1f;
+			}
+			
+			if(dx != 0f) {
+				dirVector[0] += dx/Math.abs(dx)*(10-Math.abs(dx))*mod;
+			}
+			if(dy != 0f) {
+				dirVector[1] += dy/Math.abs(dy)*(10-Math.abs(dy))*mod;
+			}
+		}
+		//System.out.println("direction" + rc.getID() + "[" + dirVector[0] + ", " + dirVector[1] + "]");
+		//System.out.println(new Direction(dirVector[0], dirVector[1]).getAngleDegrees());
+		
+		moveInDirection(new Direction(dirVector[0], dirVector[1]));
 	}
 	
 	boolean plantTrees() {
@@ -77,7 +127,7 @@ public class GardenerActor extends RobotActor {
 	
 	int senseNearbyObjects() {
 		try{
-			nearbyRobots = rc.senseNearbyRobots(2.6f);
+			nearbyRobots = rc.senseNearbyRobots(3.6f);
 			nearbyTrees = rc.senseNearbyTrees(2.6f);
 		} catch(Exception e) {e.printStackTrace();}
 		

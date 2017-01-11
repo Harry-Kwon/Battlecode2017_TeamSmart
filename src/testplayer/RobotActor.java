@@ -32,4 +32,24 @@ public class RobotActor {
 			} catch(Exception e) {e.printStackTrace();}
 		}
 	}
+	
+	public void moveInDirection(Direction dir) {
+		
+		float turnStep = 10f;
+		Direction d = dir;
+		for(int i=0; i<(int)(360f/turnStep); i++) {
+			if(rc.canMove(d)) {
+				try{
+					//System.out.println("moved");
+					rc.move(d);
+					return;
+				} catch(Exception e) {e.printStackTrace();}
+			} else {
+				d = d.rotateLeftDegrees(turnStep);
+				//System.out.println(i + ", " + d.getAngleDegrees());
+			}
+		}
+		
+		
+	}
 }
