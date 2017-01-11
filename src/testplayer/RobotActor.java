@@ -37,11 +37,19 @@ public class RobotActor {
 		
 		float turnStep = 10f;
 		Direction d = dir;
-		for(int i=0; i<(int)(360f/turnStep); i++) {
-			if(rc.canMove(d)) {
+		for(int i=0; i<(int)(180f/turnStep); i++) {
+			Direction right = d.rotateLeftDegrees(turnStep*((float) i));
+			Direction left = d.rotateRightDegrees(turnStep*((float) i));
+			if(rc.canMove(right)) {
 				try{
 					//System.out.println("moved");
-					rc.move(d);
+					rc.move(right);
+					return;
+				} catch(Exception e) {e.printStackTrace();}
+			} else if(rc.canMove(left)) {
+				try{
+					//System.out.println("moved");
+					rc.move(left);
 					return;
 				} catch(Exception e) {e.printStackTrace();}
 			} else {

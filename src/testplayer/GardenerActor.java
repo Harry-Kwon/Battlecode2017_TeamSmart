@@ -66,7 +66,7 @@ public class GardenerActor extends RobotActor {
 			}
 		}
 		
-		for(TreeInfo ti : trees) {
+		/*for(TreeInfo ti : trees) {
 			float dx = loc.x - ti.location.x;
 			float dy = loc.y - ti.location.y;
 			float mod = 0f;
@@ -88,7 +88,7 @@ public class GardenerActor extends RobotActor {
 					dirVector[0] += (10-Math.abs(dy))*mod;
 				}
 			}
-		}
+		}*/
 		//System.out.println("direction" + rc.getID() + "[" + dirVector[0] + ", " + dirVector[1] + "]");
 		//System.out.println(new Direction(dirVector[0], dirVector[1]).getAngleDegrees());
 		
@@ -137,8 +137,8 @@ public class GardenerActor extends RobotActor {
 	
 	int senseNearbyObjects() {
 		try{
-			nearbyRobots = rc.senseNearbyRobots(3.6f);
-			nearbyTrees = rc.senseNearbyTrees(2.6f);
+			nearbyRobots = rc.senseNearbyRobots(4.1f);
+			nearbyTrees = rc.senseNearbyTrees(3.1f);
 		} catch(Exception e) {e.printStackTrace();}
 		
 		if(nearbyRobots.length == 0) {
