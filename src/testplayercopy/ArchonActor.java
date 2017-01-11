@@ -1,4 +1,4 @@
-package testplayer;
+package testplayercopy;
 
 import battlecode.common.*;
 
@@ -19,7 +19,7 @@ public class ArchonActor extends RobotActor {
 			} catch(Exception e) {e.printStackTrace();}
 		}
 		
-		if(rc.getRoundNum()%30==1) {
+		if(rc.getRoundNum()%20==1) {
 			buildGardener();
 		}
 	}
