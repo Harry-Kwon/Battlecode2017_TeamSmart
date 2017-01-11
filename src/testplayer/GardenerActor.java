@@ -7,18 +7,16 @@ public class GardenerActor extends RobotActor {
 	
 	public GardenerActor(RobotController rc) {
 		super(rc);
+		lastLocation = rc.getLocation();
 	}
 	
 	boolean anchored = false;
-	RobotInfo[] nearbyRobots;
-	TreeInfo[] nearbyTrees;
 	
 	RobotInfo[] allRobots;
 	TreeInfo[] allTrees;
 	
-	MapLocation nearestLocation;
-	
 	MapLocation anchorLocation;
+	MapLocation lastLocation;
 	
 	public void act()  {
 		updateRoundVars();
@@ -26,7 +24,7 @@ public class GardenerActor extends RobotActor {
 		if(!anchored) {
 			//rc.canSenseCircle is broken so this is hopefully temporary
 			
-			if(senseNearbyObjects() == 0) {
+			if(clearToAnchor()) {
 				anchorLocation = loc;
 				anchored = true;
 				//System.out.println("Anchoring " + rc.getID());
@@ -40,6 +38,8 @@ public class GardenerActor extends RobotActor {
 				waterTrees();
 			}
 		}
+		
+		lastLocation = loc;
 	}
 	
 	void senseAll() {
@@ -51,6 +51,7 @@ public class GardenerActor extends RobotActor {
 		Direction angle = findTargetAngle();
 		MapLocation target = findTargetLocation(angle);
 		
+		System.out.println(target);
 		return target;
 	}
 	
@@ -90,7 +91,7 @@ public class GardenerActor extends RobotActor {
 			
 			float D1Score = getFitnessScore(D1);
 			float D2Score = getFitnessScore(D2);
-			System.out.println(angle);
+			//System.out.println(angle);
 			//System.out.println(D1 + ", " + D2);
 			//System.out.println(D1Score + ", " + D2Score);
 			
@@ -108,9 +109,12 @@ public class GardenerActor extends RobotActor {
 	}
 	
 	float getFitnessScore(MapLocation l) {
-		if(!rc.canSenseLocation(l)) {
-			return -999999.0f;
-		}
+		try{
+			if(rc.canSenseLocation(l) && !rc.onTheMap(l)) {
+				System.out.println("dead square");
+				return -999999.0f;
+			}
+		} catch(Exception e){e.printStackTrace();}
 		
 		float fitness = 0.0f;
 		
@@ -118,8 +122,12 @@ public class GardenerActor extends RobotActor {
 			fitness -= 1f/l.distanceSquaredTo(ri.location);
 		}
 		for(TreeInfo ti : allTrees) {
-			fitness -= 1f/l.distanceSquaredTo(ti.location);
+			if(ti.team.equals(Team.NEUTRAL)) {
+				fitness -= 1f/l.distanceSquaredTo(ti.location);
+			}
 		}
+		
+		fitness -= 10f/l.distanceSquaredTo(lastLocation);
 		
 		return fitness;
 	}
@@ -152,49 +160,57 @@ public class GardenerActor extends RobotActor {
 		
 		TreeInfo lowestTree = myTrees[0];
 		for(TreeInfo ti : myTrees){ 
-			if(ti.health < lowestTree.health) {
+			if(!lowestTree.team.equals(rc.getTeam())) {
+				lowestTree = ti;
+			} else if(ti.health < lowestTree.health && ti.team.equals(rc.getTeam())) {
 				lowestTree = ti;
 			}
 		}
 		
-		if(rc.canWater(lowestTree.ID)) {
+		if(rc.canWater(lowestTree.ID) && lowestTree.team.equals(rc.getTeam())) {
 			try{
 				rc.water(lowestTree.ID);
 			} catch(Exception e) {e.printStackTrace();}
 		}
 	}
 
-	int senseNearbyObjects() {
+	boolean clearToAnchor() {
 		//this can all easily be done with sensecircle when it is fixed
+		//all this needs to do right now is sense if anything intersects with LZ
+		
+		RobotInfo[] smallRobots;
+		TreeInfo[] smallTrees;
+		
+		RobotInfo[] bigRobots;
+		TreeInfo[] bigTrees;
+		
 		try{
-			nearbyRobots = rc.senseNearbyRobots(2.6f);
-			nearbyTrees = rc.senseNearbyTrees(2.6f);
+			smallRobots = rc.senseNearbyRobots(4.1f);
+			smallTrees = rc.senseNearbyTrees(6.1f);
+			
+			System.out.println(smallRobots.length + smallTrees.length);
+			
+			for(RobotInfo ri : smallRobots) {
+				if(ri.type.equals(RobotType.ARCHON)) {
+					System.out.println(false);
+					return false;
+				}
+			}
+			
+			for(TreeInfo ti : smallTrees) {
+				if(!ti.team.equals(Team.NEUTRAL)) {
+					System.out.println(false);
+					return false;
+				}
+			}
+
+			//bigRobots = rc.senseNearbyRobots(7.1f);
+			//bigTrees = rc.senseNearbyTrees(5.1f);
 		} catch(Exception e) {e.printStackTrace();}
 		
-		if(nearbyRobots.length == 0) {
-			if(nearbyTrees.length == 0) {
-				return 0;
-			} else {
-				nearestLocation = nearbyTrees[0].location;
-			}
-		} else {
-			nearestLocation = nearbyRobots[0].location;
-		}
 		
-		//find nearest object
-		for(RobotInfo ri : nearbyRobots) {
-			if(loc.distanceSquaredTo(ri.location) < loc.distanceSquaredTo(nearestLocation)) {
-				nearestLocation = ri.location;
-			}
-		}
 		
-		for(TreeInfo ti : nearbyTrees) {
-			if(loc.distanceSquaredTo(ti.location) < loc.distanceSquaredTo(nearestLocation)){
-				nearestLocation = ti.location;
-			}
-		}
 		
-		return(nearbyRobots.length + nearbyTrees.length);
-		
+		return true;
 	}
 }

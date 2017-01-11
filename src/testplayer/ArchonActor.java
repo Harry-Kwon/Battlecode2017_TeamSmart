@@ -19,12 +19,11 @@ public class ArchonActor extends RobotActor {
 			} catch(Exception e) {e.printStackTrace();}
 		}
 		
-		try {
+		if(rc.getRoundNum()%20==1) {
 			buildGardener();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+			
+
 	}
 	
 	boolean buildGardener() {

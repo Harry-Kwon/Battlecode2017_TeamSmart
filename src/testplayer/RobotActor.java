@@ -54,7 +54,7 @@ public class RobotActor {
 			return;
 		}
 		
-		float turnStep = 10f;
+		float turnStep = 3f;
 		Direction d = dir;
 		for(int i=0; i<(int)(180f/turnStep); i++) {
 			Direction right = d.rotateLeftDegrees(turnStep*((float) i));
