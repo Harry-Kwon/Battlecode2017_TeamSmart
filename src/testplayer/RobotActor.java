@@ -6,9 +6,11 @@ public class RobotActor {
 	
 	public RobotController rc;
 	public MapLocation loc;
+	float sensorRange;
 	
 	public RobotActor(RobotController rc){
 		this.rc = rc;
+		this.sensorRange = rc.getType().sensorRadius;
 	}
 	
 	public void act() {
@@ -22,6 +24,20 @@ public class RobotActor {
 	//Nav Code
 	
 	//binary search-ish, 4 iterations for now (360/2^4 = 22.5)
+	public void moveToLocation(MapLocation l) {
+		if(rc.canMove(l)) {
+			try{
+				rc.move(l);
+			} catch(Exception e) {e.printStackTrace();}
+		} else {
+			Direction dir = loc.directionTo(l);
+			moveInDirection(dir);
+		}
+		
+		
+		
+	}
+	
 	public void moveFromLocation(MapLocation l) {
 		Direction dir = l.directionTo(loc);
 		
@@ -34,6 +50,9 @@ public class RobotActor {
 	}
 	
 	public void moveInDirection(Direction dir) {
+		if(rc.hasMoved()) {
+			return;
+		}
 		
 		float turnStep = 10f;
 		Direction d = dir;

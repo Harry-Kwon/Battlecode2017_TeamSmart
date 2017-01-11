@@ -12,6 +12,10 @@ public class GardenerActor extends RobotActor {
 	boolean anchored = false;
 	RobotInfo[] nearbyRobots;
 	TreeInfo[] nearbyTrees;
+	
+	RobotInfo[] allRobots;
+	TreeInfo[] allTrees;
+	
 	MapLocation nearestLocation;
 	
 	MapLocation anchorLocation;
@@ -27,7 +31,9 @@ public class GardenerActor extends RobotActor {
 				anchored = true;
 				//System.out.println("Anchoring " + rc.getID());
 			} else {
-				spreadout();
+				senseAll();
+				MapLocation target = findTargetLocation();
+				moveToLocation(target);
 			}
 		} else {
 			if(!plantTrees()) {
@@ -36,65 +42,88 @@ public class GardenerActor extends RobotActor {
 		}
 	}
 	
-	void spreadout() {
-		RobotInfo[] robots = rc.senseNearbyRobots();
-		TreeInfo[] trees = rc.senseNearbyTrees();
-		
-		float[] dirVector = {0, 0};
-		
-		for(RobotInfo ri : robots) {
-			float dx = loc.x - ri.location.x;
-			float dy = loc.y - ri.location.y;
-			float mod = 1f;
-			if(ri.type.equals(RobotType.ARCHON)) {
-				mod = 1f;
-			}
-			
-			if(dx != 0f) {
-				if(dx<0f) { //there must be an easier way. dx/Math.abs(dx) doesn't work?
-					dirVector[0] += -1*(10-Math.abs(dx))*mod;
-				} else {
-					dirVector[0] += (10-Math.abs(dx))*mod;
-				}
-			}
-			if(dy != 0f) {
-				if(dy<0f) {
-					dirVector[0] += -1*(10-Math.abs(dy))*mod;
-				} else {
-					dirVector[0] += (10-Math.abs(dy))*mod;
-				}
-			}
-		}
-		
-		/*for(TreeInfo ti : trees) {
-			float dx = loc.x - ti.location.x;
-			float dy = loc.y - ti.location.y;
-			float mod = 0f;
-			if(ti.team.equals(Team.NEUTRAL)) {
-				mod = 1f;
-			}
-			
-			if(dx != 0f) {
-				if(dx<0f) {
-					dirVector[0] += -1*(10-Math.abs(dx))*mod;
-				} else {
-					dirVector[0] += (10-Math.abs(dx))*mod;
-				}
-			}
-			if(dy != 0f) {
-				if(dy<0f) {
-					dirVector[0] += -1*(10-Math.abs(dy))*mod;
-				} else {
-					dirVector[0] += (10-Math.abs(dy))*mod;
-				}
-			}
-		}*/
-		//System.out.println("direction" + rc.getID() + "[" + dirVector[0] + ", " + dirVector[1] + "]");
-		//System.out.println(new Direction(dirVector[0], dirVector[1]).getAngleDegrees());
-		
-		moveInDirection(new Direction(dirVector[0], dirVector[1]));
+	void senseAll() {
+		allRobots = rc.senseNearbyRobots();
+		allTrees = rc.senseNearbyTrees();
 	}
 	
+	MapLocation findTargetLocation() {
+		Direction angle = findTargetAngle();
+		MapLocation target = findTargetLocation(angle);
+		
+		return target;
+	}
+	
+	MapLocation findTargetLocation(Direction dir) {
+		MapLocation target = loc.add(dir, sensorRange/2f);
+		
+		float startRange = 0f;
+		float endRange = sensorRange;
+		
+		for(int i=0; i<8; i++) {
+			float startScore = getFitnessScore(loc.add(dir, startRange));
+			float endScore = getFitnessScore(loc.add(dir, endRange));
+			
+			if(startScore > endScore) {
+				endRange = (startRange+endRange)/2;
+			} else {
+				startRange = (startRange+endRange)/2;
+			}
+			
+			target = loc.add(dir, (startRange+endRange/2));
+		}
+		
+		return target;
+	}
+	
+	//angular binary search
+	Direction findTargetAngle() {
+		Direction angle = Direction.getWest();
+		float rad = sensorRange/2f;
+		System.out.println("RAD" + rad);
+		float scope = 90f;
+		
+		for(int i=0; i<8; i++) {
+			
+			MapLocation D1 = loc.add(angle.rotateRightDegrees(scope), rad);
+			MapLocation D2 = loc.add(angle.rotateLeftDegrees(scope), rad);
+			
+			float D1Score = getFitnessScore(D1);
+			float D2Score = getFitnessScore(D2);
+			System.out.println(angle);
+			//System.out.println(D1 + ", " + D2);
+			//System.out.println(D1Score + ", " + D2Score);
+			
+			if(D1Score > D2Score) {
+				angle = angle.rotateRightDegrees(scope);
+			} else {
+				angle = angle.rotateLeftDegrees(scope);
+			}
+			
+			scope/=2f;
+		}
+		
+		System.out.println(angle.getAngleDegrees());
+		return angle;
+	}
+	
+	float getFitnessScore(MapLocation l) {
+		if(!rc.canSenseLocation(l)) {
+			return -999999.0f;
+		}
+		
+		float fitness = 0.0f;
+		
+		for(RobotInfo ri : allRobots) {
+			fitness -= 1f/l.distanceSquaredTo(ri.location);
+		}
+		for(TreeInfo ti : allTrees) {
+			fitness -= 1f/l.distanceSquaredTo(ti.location);
+		}
+		
+		return fitness;
+	}
+
 	boolean plantTrees() {
 		Direction dir = Direction.getEast();
 		boolean planted = false;
@@ -134,11 +163,12 @@ public class GardenerActor extends RobotActor {
 			} catch(Exception e) {e.printStackTrace();}
 		}
 	}
-	
+
 	int senseNearbyObjects() {
+		//this can all easily be done with sensecircle when it is fixed
 		try{
-			nearbyRobots = rc.senseNearbyRobots(4.1f);
-			nearbyTrees = rc.senseNearbyTrees(3.1f);
+			nearbyRobots = rc.senseNearbyRobots(2.6f);
+			nearbyTrees = rc.senseNearbyTrees(2.6f);
 		} catch(Exception e) {e.printStackTrace();}
 		
 		if(nearbyRobots.length == 0) {
