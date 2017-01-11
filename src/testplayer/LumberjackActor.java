@@ -97,18 +97,27 @@ public class LumberjackActor extends RobotActor {
 	}
 	
 	boolean cutEnemyTrees() {
+		// cut closest lowest health tree. lowest health prioritized
 		if(allTrees.length ==0) {
 			return false;
 		}
 		TreeInfo nearestTree = allTrees[0];
 		float nearestDist = 999999f;
+		float lowestHealth = 999999f;
+		
 		for(TreeInfo ti : allTrees) {
 			if(ti.team.equals(rc.getTeam().opponent())) {
 				float dist = loc.distanceSquaredTo(ti.location);
-				if(dist < nearestDist) {
+				if(ti.health < lowestHealth) {
+					lowestHealth = ti.health;
 					nearestDist = dist;
 					nearestTree = ti;
-				}
+				} else if(ti.health == lowestHealth) {
+					if(dist < nearestDist) {
+						nearestDist = dist;
+						nearestTree = ti;
+					}
+				}	
 			}
 		}
 		
@@ -135,13 +144,20 @@ public class LumberjackActor extends RobotActor {
 		}
 		TreeInfo nearestTree = allTrees[0];
 		float nearestDist = 999999f;
+		float lowestHealth = 999999f;
 		for(TreeInfo ti : allTrees) {
 			if(!ti.team.equals(rc.getTeam())) {
 				float dist = loc.distanceSquaredTo(ti.location);
-				if(dist < nearestDist) {
+				if(ti.health < lowestHealth) {
+					lowestHealth = ti.health;
 					nearestDist = dist;
 					nearestTree = ti;
-				}
+				} else if(ti.health == lowestHealth) {
+					if(dist < nearestDist) {
+						nearestDist = dist;
+						nearestTree = ti;
+					}
+				}	
 			}
 		}
 		

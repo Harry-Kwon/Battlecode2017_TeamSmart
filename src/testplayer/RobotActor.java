@@ -43,10 +43,10 @@ public class RobotActor {
 		float rotateStep = 10f;
 		
 		for(int i=0; i<360/rotateStep; i++) {
-			MapLocation center = r.location.add(angle.rotateLeftDegrees(rotateStep*i), r.getRadius()+rc.getType().bodyRadius);
-			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
+			MapLocation center = r.location.add(angle.rotateLeftDegrees(rotateStep*i), r.getRadius()+rc.getType().bodyRadius+0.1f);
+			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius+0.1f)) {
 				try{
-					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
+					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius+0.1f)) {
 						return false;
 					}
 				} catch(Exception e){e.printStackTrace();}
@@ -62,10 +62,10 @@ public class RobotActor {
 		float rotateStep = 10f;
 		
 		for(int i=0; i<360/rotateStep; i++) {
-			MapLocation center = t.location.add(angle.rotateLeftDegrees(rotateStep*i), t.getRadius()+rc.getType().bodyRadius);
-			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
+			MapLocation center = t.location.add(angle.rotateLeftDegrees(rotateStep*i), t.getRadius()+rc.getType().bodyRadius+0.1f);
+			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius+0.1f)) {
 				try{
-					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
+					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius+0.1f)) {
 						return false;
 					}
 				} catch(Exception e){e.printStackTrace();}

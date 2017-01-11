@@ -32,6 +32,16 @@ public class RobotPlayer {
                     break;
             }
             while(true){
+            	if(rc.getTeamBullets() >= GameConstants.VICTORY_POINTS_TO_WIN*GameConstants.BULLET_EXCHANGE_RATE) {
+        			try{
+        				rc.donate(GameConstants.VICTORY_POINTS_TO_WIN*GameConstants.BULLET_EXCHANGE_RATE);
+        			} catch(Exception e) {e.printStackTrace();}
+        		}
+            	
+            	if(rc.getRoundLimit() - rc.getRoundNum() <= 1) {
+            		rc.donate(((int) rc.getTeamBullets())/10 *10);
+            	}
+            	
             	actor.act();
                 Clock.yield();
             }
