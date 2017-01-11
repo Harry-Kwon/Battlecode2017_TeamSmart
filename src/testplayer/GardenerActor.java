@@ -47,7 +47,7 @@ public class GardenerActor extends RobotActor {
 			float dy = loc.y - ri.location.y;
 			float mod = 1f;
 			if(ri.type.equals(RobotType.ARCHON)) {
-				mod = 2;
+				mod = 1f;
 			}
 			
 			if(dx != 0f) {
@@ -58,8 +58,10 @@ public class GardenerActor extends RobotActor {
 				}
 			}
 			if(dy != 0f) {
-				if(dy <0f) {
-					dirVector[1] += dy/Math.abs(dy)*(10-Math.abs(dy))*mod;
+				if(dy<0f) {
+					dirVector[0] += -1*(10-Math.abs(dy))*mod;
+				} else {
+					dirVector[0] += (10-Math.abs(dy))*mod;
 				}
 			}
 		}
@@ -73,10 +75,18 @@ public class GardenerActor extends RobotActor {
 			}
 			
 			if(dx != 0f) {
-				dirVector[0] += dx/Math.abs(dx)*(10-Math.abs(dx))*mod;
+				if(dx<0f) {
+					dirVector[0] += -1*(10-Math.abs(dx))*mod;
+				} else {
+					dirVector[0] += (10-Math.abs(dx))*mod;
+				}
 			}
 			if(dy != 0f) {
-				dirVector[1] += dy/Math.abs(dy)*(10-Math.abs(dy))*mod;
+				if(dy<0f) {
+					dirVector[0] += -1*(10-Math.abs(dy))*mod;
+				} else {
+					dirVector[0] += (10-Math.abs(dy))*mod;
+				}
 			}
 		}
 		//System.out.println("direction" + rc.getID() + "[" + dirVector[0] + ", " + dirVector[1] + "]");
