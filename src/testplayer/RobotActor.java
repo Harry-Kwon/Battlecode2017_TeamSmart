@@ -1,5 +1,6 @@
 package testplayer;
 
+import java.math.*;
 import battlecode.common.*;
 
 public class RobotActor {
@@ -12,11 +13,19 @@ public class RobotActor {
 	TreeInfo[] allTrees;
 	MapLocation lastLocation;
 	
+	boolean leftTurnBias = false;
+	
 	public RobotActor(RobotController rc){
 		this.rc = rc;
 		this.sensorRange = rc.getType().sensorRadius;
 		this.loc = rc.getLocation();
 		lastLocation = loc;
+		
+		if(Math.random()>0.5) {
+			 leftTurnBias = true;
+		} else {
+			leftTurnBias = false;
+		}
 	}
 	
 	public void act() {
@@ -200,8 +209,16 @@ public class RobotActor {
 		float turnStep = 2f;
 		Direction d = dir;
 		for(int i=0; i<(int)(180f/turnStep); i++) {
-			Direction right = d.rotateLeftDegrees(turnStep*((float) i));
-			Direction left = d.rotateRightDegrees(turnStep*((float) i));
+			if(leftTurnBias) {
+				Direction right = d.rotateLeftDegrees(turnStep*((float) i));
+				Direction left = d.rotateRightDegrees(turnStep*((float) i));
+			} else {
+				Direction right = d.rotateRightDegrees(turnStep*((float) i));
+				Direction left = d.rotateLeftDegrees(turnStep*((float) i));
+			}
+			
+			
+			
 			if(rc.canMove(right)) {
 				try{
 					//System.out.println("moved");
