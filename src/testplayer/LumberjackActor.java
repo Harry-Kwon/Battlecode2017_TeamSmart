@@ -13,9 +13,9 @@ public class LumberjackActor extends RobotActor {
 		
 		if(attackEnemyUnits()){
 			//System.out.println("attack");
-		} else if(cutEnemyTrees()) {
-			//System.out.println("cut enemy trees");
 		} else if(attackEnemyWorkers()) {
+			//System.out.println("cut enemy trees");
+		} else if(cutEnemyTrees()) {
 			//System.out.println("attack workers");
 		} else if(cutTrees()) {
 			//System.out.println("cut trees");
@@ -51,6 +51,8 @@ public class LumberjackActor extends RobotActor {
 					rc.strike();
 					return true;
 				} catch(Exception e){e.printStackTrace();}
+			} else if(robotIsSurrounded(nearestRobot)) {
+				return false;
 			} else {
 				moveToLocation(nearestRobot.location);
 				return true;
@@ -83,6 +85,9 @@ public class LumberjackActor extends RobotActor {
 					rc.strike();
 					return true;
 				} catch(Exception e){e.printStackTrace();}
+			} else if(robotIsSurrounded(nearestRobot)) {
+				System.out.println("surrounded");
+				return false;
 			} else {
 				moveToLocation(nearestRobot.location);
 				return true;
@@ -114,6 +119,8 @@ public class LumberjackActor extends RobotActor {
 					rc.chop(nearestTree.location);
 					return true;
 				} catch(Exception e){e.printStackTrace();}
+			} else if(treeIsSurrounded(nearestTree)) {
+				return false;
 			} else {
 				moveToLocation(nearestTree.location);
 				return true;
@@ -151,6 +158,8 @@ public class LumberjackActor extends RobotActor {
 					rc.chop(nearestTree.location);
 					return true;
 				} catch(Exception e){e.printStackTrace();}
+			} else if(treeIsSurrounded(nearestTree)) {
+				return false;
 			} else {
 				moveToLocation(nearestTree.location);
 				return true;

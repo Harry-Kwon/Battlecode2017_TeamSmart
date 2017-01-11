@@ -37,9 +37,43 @@ public class RobotActor {
 		allTrees = rc.senseNearbyTrees();
 	}
 	
-	/*boolean robotIsSurrounded(RobotInfo r) {
+	boolean robotIsSurrounded(RobotInfo r) {
+		boolean surrounded = true;
+		Direction angle = Direction.getEast();
+		float rotateStep = 10f;
 		
-	}*/
+		for(int i=0; i<360/rotateStep; i++) {
+			MapLocation center = r.location.add(angle.rotateLeftDegrees(rotateStep*i), r.getRadius()+rc.getType().bodyRadius);
+			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
+				try{
+					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
+						return false;
+					}
+				} catch(Exception e){e.printStackTrace();}
+			}
+		}
+		
+		return surrounded;
+	}
+	
+	boolean treeIsSurrounded(TreeInfo t) {
+		boolean surrounded = true;
+		Direction angle = Direction.getEast();
+		float rotateStep = 10f;
+		
+		for(int i=0; i<360/rotateStep; i++) {
+			MapLocation center = t.location.add(angle.rotateLeftDegrees(rotateStep*i), t.getRadius()+rc.getType().bodyRadius);
+			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
+				try{
+					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
+						return false;
+					}
+				} catch(Exception e){e.printStackTrace();}
+			}
+		}
+		
+		return surrounded;
+	}
 	
 	//Nav Code
 	
@@ -163,7 +197,7 @@ public class RobotActor {
 			return;
 		}
 		
-		float turnStep = 3f;
+		float turnStep = 2f;
 		Direction d = dir;
 		for(int i=0; i<(int)(180f/turnStep); i++) {
 			Direction right = d.rotateLeftDegrees(turnStep*((float) i));
