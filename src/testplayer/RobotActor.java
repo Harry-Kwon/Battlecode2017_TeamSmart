@@ -49,13 +49,13 @@ public class RobotActor {
 	boolean robotIsSurrounded(RobotInfo r) {
 		boolean surrounded = true;
 		Direction angle = Direction.getEast();
-		float rotateStep = 10f;
+		float rotateStep = 30;
 		
 		for(int i=0; i<360/rotateStep; i++) {
 			MapLocation center = r.location.add(angle.rotateLeftDegrees(rotateStep*i), r.getRadius()+rc.getType().bodyRadius+0.1f);
-			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius+0.1f)) {
+			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
 				try{
-					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius+0.1f)) {
+					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
 						return false;
 					}
 				} catch(Exception e){e.printStackTrace();}
@@ -68,13 +68,15 @@ public class RobotActor {
 	boolean treeIsSurrounded(TreeInfo t) {
 		boolean surrounded = true;
 		Direction angle = Direction.getEast();
-		float rotateStep = 10f;
+		float rotateStep = 30f;
 		
+		//System.out.println("T" + t.location);
 		for(int i=0; i<360/rotateStep; i++) {
 			MapLocation center = t.location.add(angle.rotateLeftDegrees(rotateStep*i), t.getRadius()+rc.getType().bodyRadius+0.1f);
-			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius+0.1f)) {
+			//System.out.println("center" + center);
+			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
 				try{
-					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius+0.1f)) {
+					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
 						return false;
 					}
 				} catch(Exception e){e.printStackTrace();}
@@ -209,31 +211,19 @@ public class RobotActor {
 		float turnStep = 2f;
 		Direction d = dir;
 		for(int i=0; i<(int)(180f/turnStep); i++) {
-			if(leftTurnBias) {
-				Direction right = d.rotateLeftDegrees(turnStep*((float) i));
-				Direction left = d.rotateRightDegrees(turnStep*((float) i));
-			} else {
-				Direction right = d.rotateRightDegrees(turnStep*((float) i));
-				Direction left = d.rotateLeftDegrees(turnStep*((float) i));
-			}
 			
-			
-			
-			if(rc.canMove(right)) {
+			if(rc.canMove(d)) {
 				try{
 					//System.out.println("moved");
-					rc.move(right);
+					rc.move(d);
 					return;
 				} catch(Exception e) {e.printStackTrace();}
-			} else if(rc.canMove(left)) {
-				try{
-					//System.out.println("moved");
-					rc.move(left);
-					return;
-				} catch(Exception e) {e.printStackTrace();}
-			} else {
-				d = d.rotateLeftDegrees(turnStep);
-				//System.out.println(i + ", " + d.getAngleDegrees());
+			}else {
+				if(leftTurnBias) {
+					d = d.rotateLeftDegrees(turnStep);
+				} else {
+					d = d.rotateRightDegrees(turnStep);
+				}
 			}
 		}
 		

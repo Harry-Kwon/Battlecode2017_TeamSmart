@@ -27,6 +27,13 @@ public class LumberjackActor extends RobotActor {
 		closeRoundVars();
 	}
 	
+	void broadcastLocation(MapLocation l) {
+		int msg = ((int) l.x) + 1000*((int) l.y);
+		try{
+			rc.broadcast(586, msg);
+		} catch(Exception e){e.printStackTrace();}
+	}
+	
 	boolean attackEnemyUnits() {
 		if(allRobots.length ==0) {
 			return false;
@@ -46,6 +53,7 @@ public class LumberjackActor extends RobotActor {
 		
 		
 		if(!nearestRobot.team.equals(rc.getTeam()) && !nearestRobot.type.equals(RobotType.GARDENER) && !nearestRobot.type.equals(RobotType.ARCHON)) {
+			broadcastLocation(nearestRobot.location);
 			if(nearestDist < (1.5f+nearestRobot.getRadius())*(1.5f+nearestRobot.getRadius())){
 				try{
 					rc.strike();
@@ -80,6 +88,7 @@ public class LumberjackActor extends RobotActor {
 		
 		
 		if(!nearestRobot.team.equals(rc.getTeam()) && (nearestRobot.type.equals(RobotType.GARDENER) || nearestRobot.type.equals(RobotType.ARCHON))) {
+			broadcastLocation(nearestRobot.location);
 			if(nearestDist < (2f+nearestRobot.getRadius())*(2f+nearestRobot.getRadius())){
 				try{
 					rc.strike();
@@ -123,6 +132,7 @@ public class LumberjackActor extends RobotActor {
 		
 		
 		if(nearestTree.team.equals(rc.getTeam().opponent())) {
+			broadcastLocation(nearestTree.location);
 			if(rc.canChop(nearestTree.location)){
 				try{
 					rc.chop(nearestTree.location);
@@ -146,7 +156,7 @@ public class LumberjackActor extends RobotActor {
 		float nearestDist = 999999f;
 		float lowestHealth = 999999f;
 		for(TreeInfo ti : allTrees) {
-			if(!ti.team.equals(rc.getTeam())) {
+			if(!ti.team.equals(rc.getTeam()) && !treeIsSurrounded(ti)) {
 				float dist = loc.distanceSquaredTo(ti.location);
 				if(ti.health < lowestHealth) {
 					lowestHealth = ti.health;
@@ -162,20 +172,19 @@ public class LumberjackActor extends RobotActor {
 		}
 		
 		
-		if(!nearestTree.team.equals(rc.getTeam())) {
+		if(!nearestTree.team.equals(rc.getTeam()) && !treeIsSurrounded(nearestTree)) {
+			broadcastLocation(nearestTree.location);
 			if(rc.canShake(nearestTree.location)) {
 				try{
 					rc.shake(nearestTree.location);
 				} catch(Exception e) {e.printStackTrace();}
 			}
-			
+			//System.out.println(nearestTree.location);
 			if(rc.canChop(nearestTree.location)){
 				try{
 					rc.chop(nearestTree.location);
 					return true;
 				} catch(Exception e){e.printStackTrace();}
-			} else if(treeIsSurrounded(nearestTree)) {
-				return false;
 			} else {
 				moveToLocation(nearestTree.location);
 				return true;
@@ -185,6 +194,23 @@ public class LumberjackActor extends RobotActor {
 	}
 	
 	void wander() {
+		int msg = 0;
+		try{
+			msg = rc.readBroadcast(586);
+		} catch(Exception e){e.printStackTrace();}
+		
+		if(msg!=0) {
+			MapLocation target = new MapLocation((float) (msg%1000), (float) (msg/1000));
+			if(!rc.canSenseLocation(target)) {
+				moveToLocation(target);
+				return;
+			} else {
+				try {
+					rc.broadcast(586, 0);
+					return;
+				} catch (GameActionException e) {e.printStackTrace();}
+			}
+		}
 		MapLocation target = findTargetLocation();
 		moveToLocation(target);
 	}
