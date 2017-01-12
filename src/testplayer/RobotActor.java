@@ -210,7 +210,7 @@ public class RobotActor {
 		
 		float turnStep = 2f;
 		Direction d = dir;
-		for(int i=0; i<(int)(180f/turnStep); i++) {
+		for(int i=0; i<(int)(360f/turnStep); i++) {
 			
 			if(rc.canMove(d)) {
 				try{
