@@ -85,4 +85,29 @@ public class SensorMod {
 		}
 		return(nearestRobot);
 	}
+	
+	public static RobotInfo getNearestRobotNotArchon(RobotController rc, Team team) {
+		RobotInfo[] allRobots = rc.senseNearbyRobots(rc.getType().sensorRadius, team);
+		
+		if(allRobots.length ==0) {
+			return null;
+		}
+		RobotInfo nearestRobot = allRobots[0];
+		float nearestDist = 999999f;
+		
+		for(RobotInfo ri : allRobots) {
+			if(ri.team.equals(team) && !ri.type.equals(RobotType.ARCHON)) {
+				float dist = rc.getLocation().distanceSquaredTo(ri.location);
+				if(dist < nearestDist) {
+					nearestDist = dist;
+					nearestRobot = ri;
+				}
+			}
+		}
+		
+		if(nearestRobot.type.equals(RobotType.ARCHON)) {
+			return null;
+		}
+		return(nearestRobot);
+	}
 }

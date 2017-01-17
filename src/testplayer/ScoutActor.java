@@ -15,6 +15,7 @@ public class ScoutActor extends RobotActor{
 		
 		//combat
 		//shake
+		shootNearestRobot();
 		shakeTree();
 		
 		//move
@@ -24,6 +25,21 @@ public class ScoutActor extends RobotActor{
 		//shake
 		
 		closeRoundVars();
+	}
+	
+	boolean shootNearestRobot() {
+		RobotInfo ri = SensorMod.getNearestRobot(rc, rc.getTeam().opponent());
+		if(ri==null) {
+			return false;
+		}
+		
+		if(rc.canFireSingleShot()) {
+			try{
+				rc.fireSingleShot(loc.directionTo(ri.location));
+				return true;
+			} catch(Exception e){e.printStackTrace();}
+		}
+		return false;
 	}
 
 	
@@ -52,13 +68,14 @@ public class ScoutActor extends RobotActor{
 		
 		float fitness = 0.0f;
 		
-		RobotInfo ri = SensorMod.getNearestRobot(rc, rc.getTeam().opponent());
+		RobotInfo ri = SensorMod.getNearestRobotNotArchon(rc, rc.getTeam().opponent());
 		if(ri!=null) {
-			float distance = rc.getType().bodyRadius+ri.getRadius();
-			if(ri.type.equals(RobotType.LUMBERJACK)) {
-				distance += 2;
+			float safeDist = 0;
+			if(ri.getType().equals(RobotType.LUMBERJACK)) {
+				safeDist = 64f;
 			}
-			fitness += Math.pow(loc.x-ri.location.x, 2)+Math.pow(loc.y-ri.location.y, 2)-Math.pow(distance, 2);
+			fitness += 1/(l.distanceSquaredTo(ri.location)-safeDist);
+			return fitness;
 		}
 		
 		for(TreeInfo ti : allTrees) {
@@ -67,7 +84,7 @@ public class ScoutActor extends RobotActor{
 			}
 		}
 		
-		//fitness -= 0.1f/l.distanceSquaredTo(lastLocation);
+		fitness -= 0.1f/l.distanceSquaredTo(lastLocation);
 		
 		return fitness;
 	}

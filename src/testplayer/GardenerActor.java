@@ -65,7 +65,7 @@ public class GardenerActor extends RobotActor {
 		RobotType type = RobotType.LUMBERJACK;
 		
 		//select robot type
-		if(rc.getRoundNum()<100 && !builtScout) {
+		if(rc.getRoundNum()<200 && !builtScout) {
 			type = RobotType.SCOUT;
 		}
 		
