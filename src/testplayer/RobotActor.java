@@ -139,12 +139,13 @@ public class RobotActor {
 		if(rc.hasMoved()) {
 			return;
 		}
+		
+		Direction dir = loc.directionTo(l);
 		if(rc.canMove(l)) {
 			try{
 				rc.move(l);
 			} catch(Exception e) {e.printStackTrace();}
 		} else {
-			Direction dir = loc.directionTo(l);
 			moveInDirection(dir);
 		}
 	}
@@ -207,4 +208,5 @@ public class RobotActor {
 		
 		
 	}
- }
+
+}

@@ -64,4 +64,25 @@ public class SensorMod {
 		}
 		return(nearestTree);
 	}
+	
+	public static RobotInfo getNearestRobot(RobotController rc, Team team) {
+		RobotInfo[] allRobots = rc.senseNearbyRobots(rc.getType().sensorRadius, team);
+		
+		if(allRobots.length ==0) {
+			return null;
+		}
+		RobotInfo nearestRobot = allRobots[0];
+		float nearestDist = 999999f;
+		
+		for(RobotInfo ri : allRobots) {
+			if(ri.team.equals(team)) {
+				float dist = rc.getLocation().distanceSquaredTo(ri.location);
+				if(dist < nearestDist) {
+					nearestDist = dist;
+					nearestRobot = ri;
+				}
+			}
+		}
+		return(nearestRobot);
+	}
 }

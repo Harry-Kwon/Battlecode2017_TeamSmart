@@ -25,6 +25,7 @@ public class ScoutActor extends RobotActor{
 		
 		closeRoundVars();
 	}
+
 	
 	boolean shakeTree() {
 		TreeInfo nearestTree = SensorMod.getNearestTree(rc, Team.NEUTRAL);
@@ -51,17 +52,22 @@ public class ScoutActor extends RobotActor{
 		
 		float fitness = 0.0f;
 		
-		for(RobotInfo ri : allRobots) {
-		//	fitness -= 1f/l.distanceSquaredTo(ri.location);
+		RobotInfo ri = SensorMod.getNearestRobot(rc, rc.getTeam().opponent());
+		if(ri!=null) {
+			float distance = rc.getType().bodyRadius+ri.getRadius();
+			if(ri.type.equals(RobotType.LUMBERJACK)) {
+				distance += 2;
+			}
+			fitness += Math.pow(loc.x-ri.location.x, 2)+Math.pow(loc.y-ri.location.y, 2)-Math.pow(distance, 2);
 		}
 		
 		for(TreeInfo ti : allTrees) {
 			if(ti.team.equals(Team.NEUTRAL)) {
-				fitness += 1f/l.distanceSquaredTo(ti.location);
+				fitness += ti.containedBullets*1f/l.distanceSquaredTo(ti.location);
 			}
 		}
 		
-		fitness -= 10f/l.distanceSquaredTo(lastLocation);
+		//fitness -= 0.1f/l.distanceSquaredTo(lastLocation);
 		
 		return fitness;
 	}

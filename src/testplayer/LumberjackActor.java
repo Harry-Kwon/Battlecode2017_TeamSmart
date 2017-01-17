@@ -95,7 +95,6 @@ public class LumberjackActor extends RobotActor {
 					return true;
 				} catch(Exception e){e.printStackTrace();}
 			} else if(SensorMod.isRobotSurrounded(rc, nearestRobot)) {
-				System.out.println("surrounded");
 				return false;
 			} else {
 				moveToLocation(nearestRobot.location);
