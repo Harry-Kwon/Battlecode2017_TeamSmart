@@ -27,7 +27,7 @@ public class ScoutActor extends RobotActor{
 	}
 	
 	boolean shakeTree() {
-		TreeInfo nearestTree = SensorMod.getNearestTree(rc, rc.getTeam());
+		TreeInfo nearestTree = SensorMod.getNearestTree(rc, Team.NEUTRAL);
 		if(nearestTree==null){
 			return false;
 		}
