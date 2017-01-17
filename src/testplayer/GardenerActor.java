@@ -15,6 +15,8 @@ public class GardenerActor extends RobotActor {
 	MapLocation anchorLocation;
 	MapLocation lastLocation;
 	
+	boolean builtScout = false;
+	
 	public void act()  {
 		updateRoundVars();
 		
@@ -60,15 +62,20 @@ public class GardenerActor extends RobotActor {
 		}*/
 		
 		Direction dir = Direction.getEast().rotateRightDegrees(60f);
+		RobotType type = RobotType.LUMBERJACK;
 		
-		if(rc.getRoundNum()%25==0 || rc.getTeamBullets() >150f) {
-			if(rc.canBuildRobot(RobotType.LUMBERJACK, dir)) {
-				try{
-					rc.buildRobot(RobotType.LUMBERJACK, dir);
-					return true;
-				} catch(Exception e) {e.printStackTrace();};
-			}
+		//select robot type
+		if(rc.getRobotCount()<100 && !builtScout) {
+			type = RobotType.SCOUT;
 		}
+
+		if(rc.canBuildRobot(type, dir)) {
+			try{
+				rc.buildRobot(type, dir);
+				return true;
+			} catch(Exception e) {e.printStackTrace();};
+		}
+		
 		return false;
 	}
 	
