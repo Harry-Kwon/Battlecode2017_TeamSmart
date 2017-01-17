@@ -32,9 +32,9 @@ public class GardenerActor extends RobotActor {
 				moveToLocation(target);
 			}
 		} else {
+			buildUnits();
 			plantTrees();
 			waterTrees();
-			buildUnits();
 		}
 		
 		closeRoundVars();
@@ -65,10 +65,10 @@ public class GardenerActor extends RobotActor {
 		RobotType type = RobotType.LUMBERJACK;
 		
 		//select robot type
-		if(rc.getRobotCount()<100 && !builtScout) {
+		if(rc.getRoundNum()<100 && !builtScout) {
 			type = RobotType.SCOUT;
 		}
-
+		
 		if(rc.canBuildRobot(type, dir)) {
 			try{
 				rc.buildRobot(type, dir);

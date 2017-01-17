@@ -46,48 +46,14 @@ public class RobotActor {
 		allTrees = rc.senseNearbyTrees();
 	}
 	
-	boolean robotIsSurrounded(RobotInfo r) {
-		boolean surrounded = true;
-		Direction angle = Direction.getEast();
-		float rotateStep = 30;
-		
-		for(int i=0; i<360/rotateStep; i++) {
-			MapLocation center = r.location.add(angle.rotateLeftDegrees(rotateStep*i), r.getRadius()+rc.getType().bodyRadius+0.1f);
-			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
-				try{
-					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
-						return false;
-					}
-				} catch(Exception e){e.printStackTrace();}
-			}
-		}
-		
-		return surrounded;
-	}
-	
-	boolean treeIsSurrounded(TreeInfo t) {
-		boolean surrounded = true;
-		Direction angle = Direction.getEast();
-		float rotateStep = 30f;
-		
-		//System.out.println("T" + t.location);
-		for(int i=0; i<360/rotateStep; i++) {
-			MapLocation center = t.location.add(angle.rotateLeftDegrees(rotateStep*i), t.getRadius()+rc.getType().bodyRadius+0.1f);
-			//System.out.println("center" + center);
-			if(rc.canSenseAllOfCircle(center, rc.getType().bodyRadius)) {
-				try{
-					if(!rc.isCircleOccupiedExceptByThisRobot(center, rc.getType().bodyRadius)) {
-						return false;
-					}
-				} catch(Exception e){e.printStackTrace();}
-			}
-		}
-		
-		return surrounded;
-	}
-	
 	//Nav Code
 	
+	//binary search-ish, 4 iterations for now (360/2^4 = 22.5)
+	//overwrite fitness Score
+	public void move() {
+		MapLocation target = findTargetLocation();
+		moveToLocation(target);
+	}
 	MapLocation findTargetLocation() {
 		Direction angle = findTargetAngle();
 		MapLocation target = findTargetLocation(angle);
@@ -95,7 +61,6 @@ public class RobotActor {
 		//System.out.println(target);
 		return target;
 	}
-	
 	MapLocation findTargetLocation(Direction dir) {
 		MapLocation target = loc.add(dir, sensorRange/2f);
 		
@@ -117,8 +82,6 @@ public class RobotActor {
 		
 		return target;
 	}
-	
-	//angular binary search
 	Direction findTargetAngle() {
 		Direction angle = Direction.getWest();
 		float rad = sensorRange/2f;
@@ -148,7 +111,6 @@ public class RobotActor {
 		//System.out.println(angle.getAngleDegrees());
 		return angle;
 	}
-	
 	float getFitnessScore(MapLocation l) {
 		try{
 			if(rc.canSenseLocation(l) && !rc.onTheMap(l)) {
@@ -173,8 +135,6 @@ public class RobotActor {
 		return fitness;
 	}
 	
-	
-	//binary search-ish, 4 iterations for now (360/2^4 = 22.5)
 	public void moveToLocation(MapLocation l) {
 		if(rc.hasMoved()) {
 			return;
@@ -187,9 +147,6 @@ public class RobotActor {
 			Direction dir = loc.directionTo(l);
 			moveInDirection(dir);
 		}
-		
-		
-		
 	}
 	
 	public void moveFromLocation(MapLocation l) {
@@ -250,4 +207,4 @@ public class RobotActor {
 		
 		
 	}
-}
+ }
