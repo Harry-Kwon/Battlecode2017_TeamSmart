@@ -1,4 +1,4 @@
-package testplayer;
+package cleanplayer;
 
 import battlecode.common.*;
 
@@ -59,10 +59,10 @@ public class LumberjackActor extends RobotActor {
 					rc.strike();
 					return true;
 				} catch(Exception e){e.printStackTrace();}
-			} else if(SensorMod.isRobotSurrounded(rc, nearestRobot)) {
+			} else if(sensor.isRobotSurrounded(nearestRobot)) {
 				return false;
 			} else {
-				moveToLocation(nearestRobot.location);
+				nav.moveToLocation(nearestRobot.location);
 				return true;
 			}
 		}
@@ -94,10 +94,10 @@ public class LumberjackActor extends RobotActor {
 					rc.strike();
 					return true;
 				} catch(Exception e){e.printStackTrace();}
-			} else if(SensorMod.isRobotSurrounded(rc, nearestRobot)) {
+			} else if(sensor.isRobotSurrounded(nearestRobot)) {
 				return false;
 			} else {
-				moveToLocation(nearestRobot.location);
+				nav.moveToLocation(nearestRobot.location);
 				return true;
 			}
 		}
@@ -137,10 +137,10 @@ public class LumberjackActor extends RobotActor {
 					rc.chop(nearestTree.location);
 					return true;
 				} catch(Exception e){e.printStackTrace();}
-			} else if(SensorMod.isTreeSurrounded(rc, nearestTree)) {
+			} else if(sensor.isTreeSurrounded(nearestTree)) {
 				return false;
 			} else {
-				moveToLocation(nearestTree.location);
+				nav.moveToLocation(nearestTree.location);
 				return true;
 			}
 		}
@@ -155,7 +155,7 @@ public class LumberjackActor extends RobotActor {
 		float nearestDist = 999999f;
 		float lowestHealth = 999999f;
 		for(TreeInfo ti : allTrees) {
-			if(!ti.team.equals(rc.getTeam()) && !SensorMod.isTreeSurrounded(rc, nearestTree)) {
+			if(!ti.team.equals(rc.getTeam()) && !sensor.isTreeSurrounded(nearestTree)) {
 				float dist = loc.distanceSquaredTo(ti.location);
 				if(ti.health < lowestHealth) {
 					lowestHealth = ti.health;
@@ -171,7 +171,7 @@ public class LumberjackActor extends RobotActor {
 		}
 		
 		
-		if(!nearestTree.team.equals(rc.getTeam()) && !SensorMod.isTreeSurrounded(rc, nearestTree)) {
+		if(!nearestTree.team.equals(rc.getTeam()) && !sensor.isTreeSurrounded(nearestTree)) {
 			broadcastLocation(nearestTree.location);
 			if(rc.canShake(nearestTree.location)) {
 				try{
@@ -185,14 +185,14 @@ public class LumberjackActor extends RobotActor {
 					return true;
 				} catch(Exception e){e.printStackTrace();}
 			} else {
-				moveToLocation(nearestTree.location);
+				nav.moveToLocation(nearestTree.location);
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	void wander() {
+	public void wander() {
 		int msg = 0;
 		try{
 			msg = rc.readBroadcast(586);
@@ -201,7 +201,7 @@ public class LumberjackActor extends RobotActor {
 		if(msg!=0) {
 			MapLocation target = new MapLocation((float) (msg%1000), (float) (msg/1000));
 			if(!rc.canSenseLocation(target)) {
-				moveToLocation(target);
+				nav.moveToLocation(target);
 				return;
 			} else {
 				try {
@@ -210,7 +210,7 @@ public class LumberjackActor extends RobotActor {
 				} catch (GameActionException e) {e.printStackTrace();}
 			}
 		}
-		MapLocation target = findTargetLocation();
-		moveToLocation(target);
+		MapLocation target = sensor.findTargetLocation();
+		nav.moveToLocation(target);
 	}
 }

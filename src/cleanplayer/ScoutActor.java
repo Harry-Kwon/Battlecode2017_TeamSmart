@@ -1,4 +1,4 @@
-package testplayer;
+package cleanplayer;
 
 import battlecode.common.*;
 
@@ -21,7 +21,7 @@ public class ScoutActor extends RobotActor{
 		shakeTree();
 		
 		//move
-		move();
+		wander();
 		
 		//combat
 		//shake
@@ -29,7 +29,7 @@ public class ScoutActor extends RobotActor{
 		closeRoundVars();
 	}
 	boolean broadcastArchonLoc(){
-		RobotInfo ri = SensorMod.findNearestBotType(rc, rc.getTeam().opponent(),RobotType.ARCHON);
+		RobotInfo ri = sensor.findNearestBotType(rc.getTeam().opponent(),RobotType.ARCHON);
 		//potentially add in statement checking repeat broadcast
 		if(ri==null){
 			return false;
@@ -49,7 +49,7 @@ public class ScoutActor extends RobotActor{
 	}
 	
 	boolean shootNearestRobot() {
-		RobotInfo ri = SensorMod.getNearestRobot(rc, rc.getTeam().opponent());
+		RobotInfo ri = sensor.getNearestRobot(rc.getTeam().opponent());
 		if(ri==null) {
 			return false;
 		}
@@ -65,7 +65,7 @@ public class ScoutActor extends RobotActor{
 
 	
 	boolean shakeTree() {
-		TreeInfo nearestTree = SensorMod.getNearestTree(rc, Team.NEUTRAL);
+		TreeInfo nearestTree = sensor.getNearestTree(Team.NEUTRAL);
 		if(nearestTree==null){
 			return false;
 		}
@@ -89,7 +89,7 @@ public class ScoutActor extends RobotActor{
 		
 		float fitness = 0.0f;
 		
-		RobotInfo ri = SensorMod.getNearestRobotNotArchon(rc, rc.getTeam().opponent());
+		RobotInfo ri = sensor.getNearestRobotNotArchon(rc.getTeam().opponent());
 		if(ri!=null) {
 			float safeDist = 0;
 			//Sets safe distance if Scout sees LUMBERJACK
