@@ -7,7 +7,7 @@ public class ScoutActor extends RobotActor{
 		super(rc);
 	}
 	
-	public void act() {
+	public void robotAct() {
 		if(!rc.isBuildReady()) {
 			return;
 		}

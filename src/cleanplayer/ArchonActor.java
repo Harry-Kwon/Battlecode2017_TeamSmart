@@ -10,7 +10,7 @@ public class ArchonActor extends RobotActor {
 		super(rc);
 	}
 	
-	public void act() {
+	public void robotAct() {
 		updateRoundVars();
 		
 		if(rc.getRoundNum()%20==1) {

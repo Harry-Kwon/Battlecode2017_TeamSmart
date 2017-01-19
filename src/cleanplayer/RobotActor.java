@@ -6,6 +6,7 @@ public class RobotActor {
 	
 	SensorMod sensor;
 	NavMod nav;
+	IndicatorMod indicator;
 	
 	public RobotController rc;
 	public MapLocation loc;
@@ -19,21 +20,23 @@ public class RobotActor {
 	boolean leftTurnBias = false;
 	
 	public RobotActor(RobotController rc){
-		initializeActor();
+		initializeActor(rc);
 	}
 	
-	void initializeActor() {
-		sensor = new SensorMod(this, rc);
-		nav = new NavMod(this, rc);
+	void initializeActor(RobotController rc) {
 		this.rc = rc;
 		this.type = rc.getType();
 		this.sensorRange = rc.getType().sensorRadius;
 		this.loc = rc.getLocation();
 		lastLocation = loc;
+		sensor = new SensorMod(this, rc);
+		nav = new NavMod(this, rc);
+		indicator = new IndicatorMod(this, rc);
 	}
 	
 	public void act() {
 		updateRoundVars();
+		System.out.println("act");
 		robotAct();
 		closeRoundVars();
 	}
@@ -42,6 +45,7 @@ public class RobotActor {
 	
 	public void updateRoundVars() {
 		this.loc = rc.getLocation();
+		indicator.drawIndicatorLine();
 		senseAll();
 	}
 	

@@ -8,7 +8,7 @@ public class LumberjackActor extends RobotActor {
 		super(rc);
 	}
 	
-	public void act() {
+	public void robotAct() {
 		updateRoundVars();
 		
 		if(attackEnemyUnits()){

@@ -1,7 +1,6 @@
 package cleanplayer;
 
 import battlecode.common.*;
-import java.math.*;
 
 public class GardenerActor extends RobotActor {
 	
@@ -17,7 +16,7 @@ public class GardenerActor extends RobotActor {
 	
 	boolean builtScout = false;
 	
-	public void act()  {
+	public void robotAct()  {
 		updateRoundVars();
 		
 		if(!anchored) {
