@@ -13,6 +13,8 @@ public class ScoutActor extends RobotActor{
 		}
 		updateRoundVars();
 		
+		//BroadcastArchon
+		
 		//combat
 		//shake
 		shootNearestRobot();
@@ -25,6 +27,25 @@ public class ScoutActor extends RobotActor{
 		//shake
 		
 		closeRoundVars();
+	}
+	boolean broadcastArchonLoc(){
+		RobotInfo ri = SensorMod.findNearestBotType(rc, rc.getTeam().opponent(),RobotType.ARCHON);
+		//potentially add in statement checking repeat broadcast
+		if(ri==null){
+			return false;
+		}
+		int x= (int) ri.getLocation().x;
+		int y= (int) ri.getLocation().y;
+		//Maps technically have integer limits of 3 digits
+		//shift x coordinates to the left half of the integer
+		int enemyloc =(x*1000)+y;
+		try {
+			rc.broadcast(1, enemyloc);
+			return true;
+		} catch (GameActionException e1) {
+			e1.printStackTrace();
+		}
+		return false;
 	}
 	
 	boolean shootNearestRobot() {
@@ -71,9 +92,15 @@ public class ScoutActor extends RobotActor{
 		RobotInfo ri = SensorMod.getNearestRobotNotArchon(rc, rc.getTeam().opponent());
 		if(ri!=null) {
 			float safeDist = 0;
+			//Sets safe distance if Scout sees LUMBERJACK
 			if(ri.getType().equals(RobotType.LUMBERJACK)) {
 				safeDist = 64f;
 			}
+			//Sets safe distance if Scout sees SOLDIER
+//			if(ri.getType().equals(RobotType.SOLDIER)){
+//				safeDist = 64f;
+//			}
+			
 			fitness += 1/(l.distanceSquaredTo(ri.location)-safeDist);
 			return fitness;
 		}

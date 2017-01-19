@@ -110,4 +110,30 @@ public class SensorMod {
 		}
 		return(nearestRobot);
 	}
+	//Generic search method that will find nearest bot of a certain type 
+	public static RobotInfo findNearestBotType(RobotController rc, Team team,RobotType robit){
+		RobotInfo[] allRobots = rc.senseNearbyRobots(rc.getType().sensorRadius, team);
+		float nearestDist = 999999f;
+		RobotInfo nearestRobot = allRobots[0];
+		//Saves index to not repeat values
+		int x=0;
+		for(int i=0;i<allRobots.length;i++){
+			if(allRobots[i].type==robit)
+			{
+				nearestRobot = allRobots[0];
+				break;
+			}
+			x++;
+		}
+		for(int i=x;i<allRobots.length;i++){
+			if(allRobots[i].type.equals(robit)){
+				float dist = rc.getLocation().distanceSquaredTo(allRobots[i].location);
+				if(dist < nearestDist) {
+					nearestDist = dist;
+					nearestRobot = allRobots[i];
+				}
+			}
+		}
+		return nearestRobot;
+	}
 }
