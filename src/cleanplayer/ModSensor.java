@@ -136,7 +136,7 @@ public class ModSensor {
 		
 		for(RobotInfo ri : allRobots) {
 			float dist = ra.loc.distanceSquaredTo(ri.location);
-			if(!nearestRobot.type.equals(RobotType.GARDENER) && !nearestRobot.type.equals(RobotType.ARCHON)) {
+			if(!ri.type.equals(RobotType.GARDENER) && !ri.type.equals(RobotType.ARCHON)) {
 				if(nearestRobot==null || dist<nearestDist)
 				nearestDist = dist;
 				nearestRobot = ri;
@@ -212,6 +212,10 @@ public class ModSensor {
 	//Generic search method that will find nearest bot of a certain type 
 	public RobotInfo findNearestBotType(Team team, RobotType type){
 		RobotInfo[] allRobots = rc.senseNearbyRobots(ra.type.sensorRadius, team);
+		if(allRobots.length==0) {
+			return null;
+		}
+		
 		float nearestDist = 999999f;
 		RobotInfo nearestRobot = allRobots[0];
 		//Saves index to not repeat values

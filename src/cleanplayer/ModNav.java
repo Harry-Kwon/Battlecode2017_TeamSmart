@@ -32,7 +32,7 @@ public class ModNav {
 		float turnStep = 2f;
 		Direction d = dir;
 		for(int i=0; i<(int)(180f/turnStep); i++) {
-			/*Direction right = d.rotateRightDegrees(turnStep*((float) i));
+			Direction right = d.rotateRightDegrees(turnStep*((float) i));
 			Direction left = d.rotateLeftDegrees(turnStep*((float) i));
 			if(leftTurnBias) {
 				right = d.rotateLeftDegrees(turnStep*((float) i));
@@ -52,9 +52,9 @@ public class ModNav {
 					rc.move(left);
 					return;
 				} catch(Exception e) {e.printStackTrace();}
-			}*/
+			}
 			
-			if(rc.canMove(d)) {
+			/*if(rc.canMove(d)) {
 				try{
 					//System.out.println("moved");
 					rc.move(d);
@@ -66,7 +66,7 @@ public class ModNav {
 				} else {
 					d = d.rotateRightDegrees(turnStep);
 				}
-			}
+			}*/
 		}
 	}
 	

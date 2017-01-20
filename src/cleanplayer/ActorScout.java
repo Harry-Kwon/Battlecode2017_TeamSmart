@@ -8,11 +8,6 @@ public class ActorScout extends ActorRobot{
 	}
 	
 	public void robotAct() {
-		if(!rc.isBuildReady()) {
-			return;
-		}
-		updateRoundVars();
-		
 		//BroadcastArchon
 		
 		//combat
@@ -25,8 +20,6 @@ public class ActorScout extends ActorRobot{
 		
 		//combat
 		//shake
-		
-		closeRoundVars();
 	}
 	boolean broadcastArchonLoc(){
 		RobotInfo ri = sensor.findNearestBotType(rc.getTeam().opponent(),RobotType.ARCHON);

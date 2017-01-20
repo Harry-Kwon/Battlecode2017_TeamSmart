@@ -41,7 +41,6 @@ public class ActorRobot {
 	//round actions
 	public void act() {
 		updateRoundVars();
-		System.out.println("act");
 		robotAct();
 		closeRoundVars();
 	}
@@ -49,6 +48,9 @@ public class ActorRobot {
 	public void robotAct() {}
 	
 	public void updateRoundVars() {
+		if(!rc.isBuildReady()) {
+			return;
+		}
 		this.loc = rc.getLocation();
 		indicator.drawIndicatorLine();
 		senseAll();

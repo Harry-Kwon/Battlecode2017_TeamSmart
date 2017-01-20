@@ -8,9 +8,7 @@ public class ActorLumberjack extends ActorRobot {
 		super(rc);
 	}
 	
-	public void robotAct() {
-		updateRoundVars();
-		
+	public void robotAct() {	
 		if(attackEnemyUnits()){
 			//System.out.println("attack");
 		} else if(attackEnemyWorkers()) {
@@ -20,11 +18,9 @@ public class ActorLumberjack extends ActorRobot {
 		} else if(cutTrees()) {
 			//System.out.println("cut trees");
 		} else {
-			wander();
+			idle();
 			//System.out.println("attack");
 		}
-		
-		closeRoundVars();
 	}
 	
 	boolean attackEnemyUnits() {		
@@ -128,21 +124,21 @@ public class ActorLumberjack extends ActorRobot {
 		return false;
 	}
 	
-	public void wander() {
+	public void idle() {
 		MapLocation target = broadcast.readBroadcastLocation(555);
-		if(target==null) {
-			super.wander();
-			return;
+		System.out.println(target);
+		if(target!=null) {
+			if(!rc.canSenseLocation(target)) {
+				nav.moveToLocation(target);
+				return;
+			} else {
+				try {
+					broadcast.clearChannel(555);
+					return;
+				} catch (Exception e) {e.printStackTrace();}
+			}
 		}
 		
-		if(!rc.canSenseLocation(target)) {
-			nav.moveToLocation(target);
-			return;
-		} else {
-			try {
-				//rc.broadcast(555, 0);
-				return;
-			} catch (Exception e) {e.printStackTrace();}
-		}
+		super.wander();
 	}
 }

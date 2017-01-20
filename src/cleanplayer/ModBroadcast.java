@@ -48,4 +48,13 @@ public class ModBroadcast {
 		return null;
 		
 	}
+	
+	boolean clearChannel(int chan) {
+		try{
+			rc.broadcast(chan, 0);
+			return true;
+		} catch(Exception e){e.printStackTrace();}
+		return false;
+		
+	}
 }
