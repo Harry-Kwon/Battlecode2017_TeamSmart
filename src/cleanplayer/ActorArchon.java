@@ -2,7 +2,7 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class ActorArchon extends ActorRobot {
+public class ActorArchon extends BaseActor {
 	
 	public ActorArchon(RobotController rc) {
 		super(rc);

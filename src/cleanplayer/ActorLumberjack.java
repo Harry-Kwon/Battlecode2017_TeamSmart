@@ -2,7 +2,7 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class ActorLumberjack extends ActorRobot {
+public class ActorLumberjack extends BaseActor {
 	
 	public ActorLumberjack(RobotController rc) {
 		super(rc);

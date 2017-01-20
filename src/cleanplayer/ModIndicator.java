@@ -4,14 +4,14 @@ import battlecode.common.*;
 
 public class ModIndicator{
 	// Instance Variables:
-	ActorRobot ra;
+	BaseActor ra;
 	RobotController rc;
 	final int[] ColorCurrentLoc = {0, 255, 0}; // Green
 	final int[] ColorPastLoc = {255, 0, 0}; // Red
 	final int[] ColorDirectionCurrent = {0, 0, 255}; // Blue
 	
 	// Constructor:
-	public ModIndicator(ActorRobot ra_in, RobotController rc_in){
+	public ModIndicator(BaseActor ra_in, RobotController rc_in){
 		ra = ra_in;
 		rc = rc_in;
 	}

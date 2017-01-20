@@ -5,10 +5,10 @@ import battlecode.common.*;
 public class ModSensor {
 	
 	RobotController rc;
-	ActorRobot ra;
+	BaseActor ra;
 	float sensorRange;
 	
-	public ModSensor(ActorRobot ra, RobotController rc) {
+	public ModSensor(BaseActor ra, RobotController rc) {
 		this.ra = ra;
 		this.rc = rc;
 		sensorRange = rc.getType().sensorRadius;

@@ -7,7 +7,7 @@ public class RobotPlayer {
 	public static void run(RobotController rc) {
 		try{
             RobotType type = rc.getType();
-            ActorRobot actor;
+            BaseActor actor;
             switch(type) {
                 case ARCHON:
                     actor = new ActorArchon(rc);
@@ -28,7 +28,7 @@ public class RobotPlayer {
                 	actor = new ActorTank(rc);
                 	break;*/
                 default:
-                    actor = new ActorRobot(rc);
+                    actor = new BaseActor(rc);
                     break;
             }
             

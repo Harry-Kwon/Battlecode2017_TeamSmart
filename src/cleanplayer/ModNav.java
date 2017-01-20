@@ -5,15 +5,19 @@ import battlecode.common.*;
 public class ModNav {
 	
 	RobotController rc;
-	ActorRobot ra;
+	BaseActor ra;
 	float maxStride;
 	boolean leftTurnBias;
 	
-	public ModNav(ActorRobot ra, RobotController rc) {
+	public ModNav(BaseActor ra, RobotController rc) {
 		this.rc = rc;
 		this.ra = ra;
 		this.maxStride = ra.type.strideRadius;
 		decideLeftTurnBias();
+	}
+	
+	String hi() {
+		return("nav");
 	}
 	
 	void decideLeftTurnBias() {

@@ -4,10 +4,10 @@ import battlecode.common.*;
 
 public class ModBroadcast {
 
-	ActorRobot ra;
+	BaseActor ra;
 	RobotController rc;
 	
-	public ModBroadcast(ActorRobot ra, RobotController rc) {
+	public ModBroadcast(BaseActor ra, RobotController rc) {
 		this.ra = ra;
 		this.rc = rc;
 	}

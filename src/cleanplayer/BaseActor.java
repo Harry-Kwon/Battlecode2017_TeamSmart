@@ -2,7 +2,7 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class ActorRobot {
+public class BaseActor {
 	
 	ModSensor sensor;
 	ModNav nav;
@@ -20,7 +20,7 @@ public class ActorRobot {
 	
 	boolean leftTurnBias = false;
 	
-	public ActorRobot(RobotController rc){
+	public BaseActor(RobotController rc){
 		initializeActor(rc);
 	}
 	
