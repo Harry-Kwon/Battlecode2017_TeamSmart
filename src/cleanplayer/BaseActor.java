@@ -66,8 +66,14 @@ public class BaseActor {
 		allTrees = rc.senseNearbyTrees();
 	}
 	
-	//Nav Code
+	//broadcasts
+	void broadcastNearestEnemy() {
+		RobotInfo ri = sensor.findNearestRobot(rc.getTeam().opponent());
+		if(ri==null) { return;}
+		broadcast.broadcastLocation(ri.location, ModBroadcast.ENEMY_SIGHTED_CHANNEL);
+	}
 	
+	//Nav Code
 	//uses radial binary search based on location fitness scoring function
 	public void wander() {
 		MapLocation target = sensor.findTargetLocation();

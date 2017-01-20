@@ -3,6 +3,8 @@ package cleanplayer;
 import battlecode.common.*;
 
 public class ModBroadcast {
+	
+	public static final int ENEMY_SIGHTED_CHANNEL=555;
 
 	BaseActor ra;
 	RobotController rc;
