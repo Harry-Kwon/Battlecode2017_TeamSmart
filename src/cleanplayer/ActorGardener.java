@@ -48,7 +48,9 @@ public class ActorGardener extends BaseActor {
 			}
 			
 			for(TreeInfo ti : smallTrees) {
-				return false;
+				if(!ti.team.equals(Team.NEUTRAL)) {
+					return false;
+				}
 			}
 		} catch(Exception e) {e.printStackTrace();}
 		
