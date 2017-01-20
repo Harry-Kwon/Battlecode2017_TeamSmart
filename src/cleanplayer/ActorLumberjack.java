@@ -126,7 +126,6 @@ public class ActorLumberjack extends ActorRobot {
 	
 	public void idle() {
 		MapLocation target = broadcast.readBroadcastLocation(555);
-		System.out.println(target);
 		if(target!=null) {
 			if(!rc.canSenseLocation(target)) {
 				nav.moveToLocation(target);

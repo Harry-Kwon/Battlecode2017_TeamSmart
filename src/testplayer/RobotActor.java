@@ -1,5 +1,6 @@
 package testplayer;
 
+import java.math.*;
 import battlecode.common.*;
 
 public class RobotActor {
@@ -8,23 +9,19 @@ public class RobotActor {
 	public MapLocation loc;
 	float sensorRange;
 	
-	public RobotInfo[] allRobots;
-	public TreeInfo[] allTrees;
-	public MapLocation lastLocation;
+	RobotInfo[] allRobots;
+	TreeInfo[] allTrees;
+	MapLocation lastLocation;
 	
 	boolean leftTurnBias = false;
 	
-	public IndicatorMod indicator;
-	
 	public RobotActor(RobotController rc){
-		indicator = new IndicatorMod(this, rc);
-		
 		this.rc = rc;
 		this.sensorRange = rc.getType().sensorRadius;
 		this.loc = rc.getLocation();
 		lastLocation = loc;
 		
-		if(Math.random() > 0.5) {
+		if(Math.random()>0.5) {
 			 leftTurnBias = true;
 		} else {
 			leftTurnBias = false;
@@ -37,7 +34,6 @@ public class RobotActor {
 	
 	public void updateRoundVars() {
 		this.loc = rc.getLocation();
-		indicator.drawIndicatorLine();
 		senseAll();
 	}
 	
