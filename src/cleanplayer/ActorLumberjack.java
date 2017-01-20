@@ -27,62 +27,41 @@ public class ActorLumberjack extends ActorRobot {
 		closeRoundVars();
 	}
 	
-	boolean attackEnemyUnits() {
-		if(allRobots.length ==0) {
+	boolean attackEnemyUnits() {		
+		RobotInfo nearestRobot = sensor.findNearestAttacker(rc.getTeam().opponent());
+		if(nearestRobot==null) {
 			return false;
 		}
 		
-		RobotInfo nearestRobot = allRobots[0];
-		float nearestDist = 999999f;
-		for(RobotInfo ri : allRobots) {
-			if(!ri.team.equals(rc.getTeam()) && !ri.type.equals(RobotType.GARDENER) && !ri.type.equals(RobotType.ARCHON)) {
-				float dist = loc.distanceSquaredTo(ri.location);
-				if(dist < nearestDist) {
-					nearestDist = dist;
-					nearestRobot = ri;
-				}
-			}
-		}
-		
-		
-		if(!nearestRobot.team.equals(rc.getTeam()) && !nearestRobot.type.equals(RobotType.GARDENER) && !nearestRobot.type.equals(RobotType.ARCHON)) {
-			broadcast.broadcastLocation(nearestRobot.location, 555);
-			if(nearestDist < (1.5f+nearestRobot.getRadius())*(1.5f+nearestRobot.getRadius())){
-				try{
-					rc.strike();
-					return true;
-				} catch(Exception e){e.printStackTrace();}
-			} else if(sensor.isRobotSurrounded(nearestRobot)) {
-				return false;
-			} else {
-				nav.moveToLocation(nearestRobot.location);
+		broadcast.broadcastLocation(nearestRobot.location, 555);
+		if(loc.distanceSquaredTo(nearestRobot.location) < Math.pow(1.5f+nearestRobot.getRadius(), 2)){
+			try{
+				rc.strike();
 				return true;
-			}
+			} catch(Exception e){e.printStackTrace();}
+		} else if(sensor.isRobotSurrounded(nearestRobot)) {
+			return false;
+		} else {
+			nav.moveToLocation(nearestRobot.location);
+			return true;
 		}
+		
 		return false;
 	}
 	
 	boolean attackEnemyWorkers() {
-		if(allRobots.length ==0) {
-			return false;
-		}
-		
-		RobotInfo nearestRobot = allRobots[0];
-		float nearestDist = 999999f;
-		for(RobotInfo ri : allRobots) {
-			if(!ri.team.equals(rc.getTeam()) && (ri.type.equals(RobotType.GARDENER) || ri.type.equals(RobotType.ARCHON))) {
-				float dist = loc.distanceSquaredTo(ri.location);
-				if(dist < nearestDist) {
-					nearestDist = dist;
-					nearestRobot = ri;
-				}
+		RobotInfo nearestRobot = sensor.findNearestBotType(rc.getTeam().opponent(), RobotType.GARDENER);
+		if(nearestRobot==null) {
+			nearestRobot = sensor.findNearestBotType(rc.getTeam().opponent(), RobotType.ARCHON);
+			if(nearestRobot==null) {
+				return false;
 			}
 		}
 		
-		
 		if(!nearestRobot.team.equals(rc.getTeam()) && (nearestRobot.type.equals(RobotType.GARDENER) || nearestRobot.type.equals(RobotType.ARCHON))) {
 			broadcast.broadcastLocation(nearestRobot.location, 555);
-			if(nearestDist < (2f+nearestRobot.getRadius())*(2f+nearestRobot.getRadius())){
+			//required distance to hit is attack radius
+			if(loc.distanceSquaredTo(nearestRobot.location) < Math.pow(2f+nearestRobot.getRadius(), 2)){
 				try{
 					rc.strike();
 					return true;

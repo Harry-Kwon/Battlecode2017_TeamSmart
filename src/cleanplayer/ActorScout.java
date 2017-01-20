@@ -30,6 +30,10 @@ public class ActorScout extends ActorRobot{
 	}
 	boolean broadcastArchonLoc(){
 		RobotInfo ri = sensor.findNearestBotType(rc.getTeam().opponent(),RobotType.ARCHON);
+		if(ri==null) {
+			return false;
+		}
+		
 		//potentially add in statement checking repeat broadcast
 		if(broadcast.broadcastLocation(ri.location, 1)) {
 			return true;
@@ -38,7 +42,7 @@ public class ActorScout extends ActorRobot{
 	}
 	
 	boolean shootNearestRobot() {
-		RobotInfo ri = sensor.getNearestRobot(rc.getTeam().opponent());
+		RobotInfo ri = sensor.findNearestRobot(rc.getTeam().opponent());
 		if(ri==null) {
 			return false;
 		}
@@ -62,7 +66,7 @@ public class ActorScout extends ActorRobot{
 		
 		float fitness = 0.0f;
 		
-		RobotInfo ri = sensor.getNearestRobotNotArchon(rc.getTeam().opponent());
+		RobotInfo ri = sensor.findNearestRobotNotArchon(rc.getTeam().opponent());
 		if(ri!=null) {
 			float safeDist = 0;
 			//Sets safe distance if Scout sees LUMBERJACK

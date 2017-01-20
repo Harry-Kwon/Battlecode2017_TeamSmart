@@ -99,7 +99,7 @@ public class ActorRobot {
 	
 	//misc
 	boolean shakeTree() {
-		TreeInfo nearestTree = sensor.getNearestTree(Team.NEUTRAL);
+		TreeInfo nearestTree = sensor.findNearestTree(Team.NEUTRAL);
 		if(nearestTree==null){
 			return false;
 		}
