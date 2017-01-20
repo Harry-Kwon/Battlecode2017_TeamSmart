@@ -54,7 +54,7 @@ public class ModSensor {
 		return surrounded;
 	}
 	
-	public TreeInfo getNearestTree(Team team) {
+	public TreeInfo findNearestTree(Team team) {
 		TreeInfo[] allTrees = rc.senseNearbyTrees(ra.type.sensorRadius, team);
 		
 		if(allTrees.length ==0) {
@@ -75,7 +75,7 @@ public class ModSensor {
 		return(nearestTree);
 	}
 	
-	public RobotInfo getNearestRobot(Team team) {
+	public RobotInfo findNearestRobot(Team team) {
 		RobotInfo[] allRobots = rc.senseNearbyRobots(ra.type.sensorRadius, team);
 		
 		if(allRobots.length ==0) {
@@ -96,7 +96,29 @@ public class ModSensor {
 		return(nearestRobot);
 	}
 	
-	public RobotInfo getNearestRobotNotArchon(Team team) {
+	//gets nearest non-gardener or archon robot in sensor range
+	public RobotInfo findNearestAttacker(Team team) {
+		RobotInfo[] allRobots = rc.senseNearbyRobots(ra.type.sensorRadius, team);
+		if(allRobots.length ==0) {
+			return null;
+		}
+		
+		RobotInfo nearestRobot=null;
+		float nearestDist = 999999f;
+		
+		for(RobotInfo ri : allRobots) {
+			float dist = ra.loc.distanceSquaredTo(ri.location);
+			if(!nearestRobot.type.equals(RobotType.GARDENER) && !nearestRobot.type.equals(RobotType.ARCHON)) {
+				if(nearestRobot==null || dist<nearestDist)
+				nearestDist = dist;
+				nearestRobot = ri;
+			}
+		}
+		
+		return(nearestRobot);
+	}
+
+	public RobotInfo findNearestRobotNotArchon(Team team) {
 		RobotInfo[] allRobots = rc.senseNearbyRobots(ra.type.sensorRadius, team);
 		
 		if(allRobots.length ==0) {
@@ -122,7 +144,7 @@ public class ModSensor {
 	}
 	
 	//senses robots of 
-	public RobotInfo[] getRobotsInRange(Team team, RobotType type, float range) {
+	public RobotInfo[] findRobotsInRange(Team team, RobotType type, float range) {
 		RobotInfo[] rawInfo;
 		if(team != null) {
 			rawInfo = rc.senseNearbyRobots(range, team);
@@ -167,7 +189,7 @@ public class ModSensor {
 		//Saves index to not repeat values
 		int x=0;
 		for(int i=0;i<allRobots.length;i++){
-			if(allRobots[i].type==type)
+			if(allRobots[i].type.equals(type))
 			{
 				nearestRobot = allRobots[0];
 				break;
@@ -183,6 +205,12 @@ public class ModSensor {
 				}
 			}
 		}
+		
+		//in case no robots of type are detected
+		if(!nearestRobot.type.equals(type)) {
+			return null;
+		}
+		
 		return nearestRobot;
 	}
 
