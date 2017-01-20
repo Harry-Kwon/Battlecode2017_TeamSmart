@@ -24,6 +24,7 @@ public class ActorRobot {
 		initializeActor(rc);
 	}
 	
+	//initialization
 	void initializeActor(RobotController rc) {
 		this.rc = rc;
 		this.type = rc.getType();
@@ -37,6 +38,7 @@ public class ActorRobot {
 		indicator = new ModIndicator(this, rc);
 	}
 	
+	//round actions
 	public void act() {
 		updateRoundVars();
 		System.out.println("act");
@@ -56,6 +58,7 @@ public class ActorRobot {
 		lastLocation = loc;
 	}
 	
+	//sensing
 	void senseAll() {
 		allRobots = rc.senseNearbyRobots();
 		allTrees = rc.senseNearbyTrees();
@@ -63,16 +66,13 @@ public class ActorRobot {
 	
 	//Nav Code
 	
-	//binary search-ish, 4 iterations for now (360/2^4 = 22.5)
-	//overwrite fitness Score
-	
+	//uses radial binary search based on location fitness scoring function
 	public void wander() {
 		MapLocation target = sensor.findTargetLocation();
 		nav.moveToLocation(target);
 	}
 	
-	
-	
+	//overwrite fitness Score for each child class
 	float getFitnessScore(MapLocation l) {
 		try{
 			if(rc.canSenseLocation(l) && !rc.onTheMap(l)) {
@@ -95,5 +95,21 @@ public class ActorRobot {
 		fitness -= 10f/l.distanceSquaredTo(lastLocation);
 		
 		return fitness;
+	}
+	
+	//misc
+	boolean shakeTree() {
+		TreeInfo nearestTree = sensor.getNearestTree(Team.NEUTRAL);
+		if(nearestTree==null){
+			return false;
+		}
+		
+		if(rc.canShake(nearestTree.ID)) {
+			try{
+				rc.shake(nearestTree.ID);
+				return true;
+			} catch(Exception e){e.printStackTrace();}
+		}
+		return false;
 	}
 }

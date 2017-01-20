@@ -51,22 +51,6 @@ public class ActorScout extends ActorRobot{
 		}
 		return false;
 	}
-
-	
-	boolean shakeTree() {
-		TreeInfo nearestTree = sensor.getNearestTree(Team.NEUTRAL);
-		if(nearestTree==null){
-			return false;
-		}
-		
-		if(rc.canShake(nearestTree.ID)) {
-			try{
-				rc.shake(nearestTree.ID);
-				return true;
-			} catch(Exception e){e.printStackTrace();}
-		}
-		return false;
-	}
 	
 	float getFitnessScore(MapLocation l) {
 		try{
