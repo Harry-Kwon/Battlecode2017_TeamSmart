@@ -44,15 +44,11 @@ public class ActorGardener extends ActorRobot {
 			smallTrees = rc.senseNearbyTrees(6.1f);
 			
 			for(RobotInfo ri : smallRobots) {
-				if(ri.type.equals(RobotType.ARCHON)) {
-					return false;
-				}
+				return false;
 			}
 			
 			for(TreeInfo ti : smallTrees) {
-				if(!ti.team.equals(Team.NEUTRAL)) {
-					return false;
-				}
+				return false;
 			}
 		} catch(Exception e) {e.printStackTrace();}
 		
@@ -61,6 +57,7 @@ public class ActorGardener extends ActorRobot {
 	
 	/*
 	attempts to build units and returns true if successful*/
+
 	boolean buildUnits() {
 		Direction dir = Direction.getEast().rotateRightDegrees(60f);
 		RobotType type = RobotType.LUMBERJACK;
@@ -80,7 +77,7 @@ public class ActorGardener extends ActorRobot {
 		return false;
 	}
 	/*
-	attemps to plant trees and returns true if successful*/
+	attempts to plant trees and returns true if successful*/
 	boolean plantTrees() {
 		Direction dir = Direction.getEast();
 		boolean planted = false;
@@ -104,21 +101,14 @@ public class ActorGardener extends ActorRobot {
 	/*
 	attempts to water trees and returns true if successful*/
 	boolean waterTrees() {
-		TreeInfo[] myTrees = rc.senseNearbyTrees(1.1f);
+		TreeInfo[] myTrees = rc.senseNearbyTrees(1.1f, rc.getTeam());
 		if(myTrees.length == 0) {
 			return false;
 		}
 		
-		TreeInfo lowestTree = myTrees[0];
-		for(TreeInfo ti : myTrees){ 
-			if(!lowestTree.team.equals(rc.getTeam())) {
-				lowestTree = ti;
-			} else if(ti.health < lowestTree.health && ti.team.equals(rc.getTeam())) {
-				lowestTree = ti;
-			}
-		}
+		TreeInfo lowestTree = UtilTrees.findLowestTree(myTrees);
 		
-		if(rc.canWater(lowestTree.ID) && lowestTree.team.equals(rc.getTeam())) {
+		if(rc.canWater(lowestTree.ID)) {
 			try{
 				rc.water(lowestTree.ID);
 				return true;

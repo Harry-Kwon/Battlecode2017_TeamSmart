@@ -120,6 +120,45 @@ public class ModSensor {
 		}
 		return(nearestRobot);
 	}
+	
+	//senses robots of 
+	public RobotInfo[] getRobotsInRange(Team team, RobotType type, float range) {
+		RobotInfo[] rawInfo;
+		if(team != null) {
+			rawInfo = rc.senseNearbyRobots(range, team);
+		} else {
+			rawInfo = rc.senseNearbyRobots(range);
+		}
+		
+		//remove elements that do not meet criteria
+		int removed=0;
+		for(RobotInfo ri : rawInfo) {
+			if(nequal(ri.team, team) || nequal(ri.type, type)) {
+				ri = null;
+				removed++;
+			}
+		}
+		
+		//create compact array
+		RobotInfo[] filteredInfo = new RobotInfo[rawInfo.length-removed];
+		int i=0;
+		for(RobotInfo ri : rawInfo) {
+			if(ri!=null) {
+				filteredInfo[i++]=ri;
+			}
+		}
+		return filteredInfo;
+	}
+	
+	//helper equality functions. returns true if either is null
+	<T> boolean nequal(T t1, T t2) {
+		if(t1==null || t2==null) {	
+			return false;
+		} else {
+			return(!t1.equals(t2));
+		}
+	}
+	
 	//Generic search method that will find nearest bot of a certain type 
 	public RobotInfo findNearestBotType(Team team, RobotType type){
 		RobotInfo[] allRobots = rc.senseNearbyRobots(ra.type.sensorRadius, team);
