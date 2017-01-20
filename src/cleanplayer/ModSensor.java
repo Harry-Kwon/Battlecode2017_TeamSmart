@@ -54,9 +54,36 @@ public class ModSensor {
 		return surrounded;
 	}
 	
+	public TreeInfo findLowestNearestTree(Team team) {
+		TreeInfo[] allTrees = rc.senseNearbyTrees(ra.type.sensorRadius, team);
+		if(allTrees.length ==0) {
+			return null;
+		}
+		TreeInfo nearestTree = allTrees[0];
+		float nearestDist = 999999f;
+		float lowestHealth = 999999f;
+		
+		for(TreeInfo ti : allTrees) {
+			if(ti.team.equals(rc.getTeam().opponent())) {
+				float dist = ra.loc.distanceSquaredTo(ti.location);
+				if(ti.health < lowestHealth) {
+					lowestHealth = ti.health;
+					nearestDist = dist;
+					nearestTree = ti;
+				} else if(ti.health == lowestHealth) {
+					if(dist < nearestDist) {
+						nearestDist = dist;
+						nearestTree = ti;
+					}
+				}	
+			}
+		}
+		
+		return(nearestTree);
+	}
+	
 	public TreeInfo findNearestTree(Team team) {
 		TreeInfo[] allTrees = rc.senseNearbyTrees(ra.type.sensorRadius, team);
-		
 		if(allTrees.length ==0) {
 			return null;
 		}
@@ -72,6 +99,7 @@ public class ModSensor {
 				}
 			}
 		}
+		
 		return(nearestTree);
 	}
 	

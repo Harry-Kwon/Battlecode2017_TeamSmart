@@ -31,6 +31,10 @@ public class ModBroadcast {
 	MapLocation readBroadcastLocation(int chan) {
 		try{
 			int msg = rc.readBroadcast(chan);
+			//ignore default value
+			if(msg==0) {
+				return null;
+			}
 			
 			//Maps technically have integer limits of 3 digits
 			//shift x coordinates to the left half of the integer
