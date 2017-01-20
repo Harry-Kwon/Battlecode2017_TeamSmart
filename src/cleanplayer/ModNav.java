@@ -2,14 +2,14 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class NavMod {
+public class ModNav {
 	
 	RobotController rc;
-	RobotActor ra;
+	ActorRobot ra;
 	float maxStride;
 	boolean leftTurnBias;
 	
-	public NavMod(RobotActor ra, RobotController rc) {
+	public ModNav(ActorRobot ra, RobotController rc) {
 		this.rc = rc;
 		this.ra = ra;
 		this.maxStride = ra.type.strideRadius;

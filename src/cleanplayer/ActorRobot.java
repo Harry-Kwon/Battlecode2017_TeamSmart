@@ -2,11 +2,12 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class RobotActor {
+public class ActorRobot {
 	
-	SensorMod sensor;
-	NavMod nav;
-	IndicatorMod indicator;
+	ModSensor sensor;
+	ModNav nav;
+	ModIndicator indicator;
+	ModBroadcast broadcast;
 	
 	public RobotController rc;
 	public MapLocation loc;
@@ -19,7 +20,7 @@ public class RobotActor {
 	
 	boolean leftTurnBias = false;
 	
-	public RobotActor(RobotController rc){
+	public ActorRobot(RobotController rc){
 		initializeActor(rc);
 	}
 	
@@ -28,10 +29,12 @@ public class RobotActor {
 		this.type = rc.getType();
 		this.sensorRange = rc.getType().sensorRadius;
 		this.loc = rc.getLocation();
+		
 		lastLocation = loc;
-		sensor = new SensorMod(this, rc);
-		nav = new NavMod(this, rc);
-		indicator = new IndicatorMod(this, rc);
+		sensor = new ModSensor(this, rc);
+		nav = new ModNav(this, rc);
+		broadcast = new ModBroadcast(this, rc);
+		indicator = new ModIndicator(this, rc);
 	}
 	
 	public void act() {

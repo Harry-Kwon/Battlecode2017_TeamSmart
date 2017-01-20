@@ -2,9 +2,9 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class GardenerActor extends RobotActor {
+public class ActorGardener extends ActorRobot {
 	
-	public GardenerActor(RobotController rc) {
+	public ActorGardener(RobotController rc) {
 		super(rc);
 		lastLocation = rc.getLocation();
 	}
@@ -17,15 +17,12 @@ public class GardenerActor extends RobotActor {
 	boolean builtScout = false;
 	
 	public void robotAct()  {
-		updateRoundVars();
+		buildUnits();
 		
 		if(!anchored) {
-			//rc.canSenseCircle is broken so this is hopefully temporary
-			
-			if(clearToAnchor()) {
+			if(tryToAnchor()) {
 				anchorLocation = loc;
 				anchored = true;
-				//System.out.println("Anchoring " + rc.getID());
 			} else {
 				wander();
 			}
@@ -34,31 +31,37 @@ public class GardenerActor extends RobotActor {
 			plantTrees();
 			waterTrees();
 		}
-		
-		closeRoundVars();
 	}
 	
+	/*
+	attempts to anchor and returns true if successful */
+	boolean tryToAnchor() {
+		RobotInfo[] smallRobots;
+		TreeInfo[] smallTrees;
+		
+		try{
+			smallRobots = rc.senseNearbyRobots(4.1f);
+			smallTrees = rc.senseNearbyTrees(6.1f);
+			
+			for(RobotInfo ri : smallRobots) {
+				if(ri.type.equals(RobotType.ARCHON)) {
+					return false;
+				}
+			}
+			
+			for(TreeInfo ti : smallTrees) {
+				if(!ti.team.equals(Team.NEUTRAL)) {
+					return false;
+				}
+			}
+		} catch(Exception e) {e.printStackTrace();}
+		
+		return true;
+	}
+	
+	/*
+	attempts to build units and returns true if successful*/
 	boolean buildUnits() {
-		//sense for nearby trees
-		/*boolean hasTree=false, hasEnemy=false;
-		for(TreeInfo ti : allTrees) {
-			if(!ti.team.equals(rc.getTeam())) {
-				hasTree = true;
-				break;
-			}
-		}
-		
-		for(RobotInfo ri : allRobots) {
-			if(!ri.team.equals(rc.getTeam())) {
-				hasEnemy = true;
-				break;
-			}
-		}
-		
-		if(!(hasTree || hasEnemy)) {
-			return false;
-		}*/
-		
 		Direction dir = Direction.getEast().rotateRightDegrees(60f);
 		RobotType type = RobotType.LUMBERJACK;
 		
@@ -76,9 +79,8 @@ public class GardenerActor extends RobotActor {
 		
 		return false;
 	}
-	
-	
-
+	/*
+	attemps to plant trees and returns true if successful*/
 	boolean plantTrees() {
 		Direction dir = Direction.getEast();
 		boolean planted = false;
@@ -99,6 +101,8 @@ public class GardenerActor extends RobotActor {
 		return planted;
 	}
 	
+	/*
+	attempts to water trees and returns true if successful*/
 	boolean waterTrees() {
 		TreeInfo[] myTrees = rc.senseNearbyTrees(1.1f);
 		if(myTrees.length == 0) {
@@ -124,39 +128,5 @@ public class GardenerActor extends RobotActor {
 		return false;
 	}
 
-	boolean clearToAnchor() {
-		//this can all easily be done with sensecircle when it is fixed
-		//all this needs to do right now is sense if anything intersects with LZ
-		
-		RobotInfo[] smallRobots;
-		TreeInfo[] smallTrees;
-		
-		RobotInfo[] bigRobots;
-		TreeInfo[] bigTrees;
-		
-		try{
-			smallRobots = rc.senseNearbyRobots(4.1f);
-			smallTrees = rc.senseNearbyTrees(6.1f);
-			
-			for(RobotInfo ri : smallRobots) {
-				if(ri.type.equals(RobotType.ARCHON)) {
-					return false;
-				}
-			}
-			
-			for(TreeInfo ti : smallTrees) {
-				if(!ti.team.equals(Team.NEUTRAL)) {
-					return false;
-				}
-			}
-
-			//bigRobots = rc.senseNearbyRobots(7.1f);
-			//bigTrees = rc.senseNearbyTrees(5.1f);
-		} catch(Exception e) {e.printStackTrace();}
-		
-		
-		
-		
-		return true;
-	}
+	
 }

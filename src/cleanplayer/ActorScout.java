@@ -2,8 +2,8 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class ScoutActor extends RobotActor{
-	public ScoutActor(RobotController rc) {
+public class ActorScout extends ActorRobot{
+	public ActorScout(RobotController rc) {
 		super(rc);
 	}
 	
@@ -31,19 +31,8 @@ public class ScoutActor extends RobotActor{
 	boolean broadcastArchonLoc(){
 		RobotInfo ri = sensor.findNearestBotType(rc.getTeam().opponent(),RobotType.ARCHON);
 		//potentially add in statement checking repeat broadcast
-		if(ri==null){
-			return false;
-		}
-		int x= (int) ri.getLocation().x;
-		int y= (int) ri.getLocation().y;
-		//Maps technically have integer limits of 3 digits
-		//shift x coordinates to the left half of the integer
-		int enemyloc =(x*1000)+y;
-		try {
-			rc.broadcast(1, enemyloc);
+		if(broadcast.broadcastLocation(ri.location, 1)) {
 			return true;
-		} catch (GameActionException e1) {
-			e1.printStackTrace();
 		}
 		return false;
 	}

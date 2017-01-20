@@ -7,28 +7,28 @@ public class RobotPlayer {
 	public static void run(RobotController rc) {
 		try{
             RobotType type = rc.getType();
-            RobotActor actor;
+            ActorRobot actor;
             switch(type) {
                 case ARCHON:
-                    actor = new ArchonActor(rc);
+                    actor = new ActorArchon(rc);
                     break;
                 case GARDENER:
-                    actor = new GardenerActor(rc);
+                    actor = new ActorGardener(rc);
                     break;
                 case LUMBERJACK:
-                    actor = new LumberjackActor(rc);
+                    actor = new ActorLumberjack(rc);
                     break;
                 case SCOUT:
-                	actor = new ScoutActor(rc);
+                	actor = new ActorScout(rc);
                 	break;
                 /*case SOLDIER:
-                    actor = new ScoutActor(rc);
+                    actor = new ActorSoldier(rc);
                     break;
                 case TANK:
-                	actor = new GuardActor(rc);
+                	actor = new ActorTank(rc);
                 	break;*/
                 default:
-                    actor = new RobotActor(rc);
+                    actor = new ActorRobot(rc);
                     break;
             }
             

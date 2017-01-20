@@ -2,13 +2,13 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class SensorMod {
+public class ModSensor {
 	
 	RobotController rc;
-	RobotActor ra;
+	ActorRobot ra;
 	float sensorRange;
 	
-	public SensorMod(RobotActor ra, RobotController rc) {
+	public ModSensor(ActorRobot ra, RobotController rc) {
 		this.ra = ra;
 		this.rc = rc;
 		sensorRange = rc.getType().sensorRadius;
@@ -121,14 +121,14 @@ public class SensorMod {
 		return(nearestRobot);
 	}
 	//Generic search method that will find nearest bot of a certain type 
-	public RobotInfo findNearestBotType(Team team, RobotType robit){
+	public RobotInfo findNearestBotType(Team team, RobotType type){
 		RobotInfo[] allRobots = rc.senseNearbyRobots(ra.type.sensorRadius, team);
 		float nearestDist = 999999f;
 		RobotInfo nearestRobot = allRobots[0];
 		//Saves index to not repeat values
 		int x=0;
 		for(int i=0;i<allRobots.length;i++){
-			if(allRobots[i].type==robit)
+			if(allRobots[i].type==type)
 			{
 				nearestRobot = allRobots[0];
 				break;
@@ -136,7 +136,7 @@ public class SensorMod {
 			x++;
 		}
 		for(int i=x;i<allRobots.length;i++){
-			if(allRobots[i].type.equals(robit)){
+			if(allRobots[i].type.equals(type)){
 				float dist = rc.getLocation().distanceSquaredTo(allRobots[i].location);
 				if(dist < nearestDist) {
 					nearestDist = dist;

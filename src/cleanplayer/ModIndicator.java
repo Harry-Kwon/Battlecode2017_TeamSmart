@@ -2,16 +2,16 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class IndicatorMod{
+public class ModIndicator{
 	// Instance Variables:
-	RobotActor ra;
+	ActorRobot ra;
 	RobotController rc;
 	final int[] ColorCurrentLoc = {0, 255, 0}; // Green
 	final int[] ColorPastLoc = {255, 0, 0}; // Red
 	final int[] ColorDirectionCurrent = {0, 0, 255}; // Blue
 	
 	// Constructor:
-	public IndicatorMod(RobotActor ra_in, RobotController rc_in){
+	public ModIndicator(ActorRobot ra_in, RobotController rc_in){
 		ra = ra_in;
 		rc = rc_in;
 	}

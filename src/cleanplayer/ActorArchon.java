@@ -2,27 +2,20 @@ package cleanplayer;
 
 import battlecode.common.*;
 
-public class ArchonActor extends RobotActor {
-
-	float rotationStep=10f;
+public class ActorArchon extends ActorRobot {
 	
-	public ArchonActor(RobotController rc) {
+	public ActorArchon(RobotController rc) {
 		super(rc);
 	}
 	
 	public void robotAct() {
-		updateRoundVars();
-		
 		if(rc.getRoundNum()%20==1) {
 			buildGardener();
 		}
-		
-		
-		closeRoundVars();
 	}
 	
 	boolean buildGardener() {
-		
+		float rotationStep=10f;
 		Direction dir = Direction.getEast();
 		boolean spawned = false;
 		
