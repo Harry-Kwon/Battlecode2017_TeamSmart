@@ -13,9 +13,9 @@ public class ArchonActor extends RobotActor {
 	public void act() {
 		updateRoundVars();
 		
-		if(rc.getTeamBullets() >= GameConstants.VICTORY_POINTS_TO_WIN*GameConstants.BULLET_EXCHANGE_RATE) {
+		if(rc.getTeamBullets() >= GameConstants.VICTORY_POINTS_TO_WIN*(7.5f + (rc.getRoundNum())*12.5f / 3000f)) {
 			try{
-				rc.donate(GameConstants.VICTORY_POINTS_TO_WIN*GameConstants.BULLET_EXCHANGE_RATE);
+				rc.donate(GameConstants.VICTORY_POINTS_TO_WIN*(7.5f + (rc.getRoundNum())*12.5f / 3000f));
 			} catch(Exception e) {e.printStackTrace();}
 		}
 		
