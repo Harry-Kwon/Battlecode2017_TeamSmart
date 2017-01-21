@@ -82,6 +82,31 @@ public class ModSensor {
 		return(nearestTree);
 	}
 	
+	public TreeInfo findNearestFullNeutralTree() {
+		TreeInfo[] allTrees = rc.senseNearbyTrees(ra.type.sensorRadius, Team.NEUTRAL);
+		if(allTrees.length ==0) {
+			return null;
+		}
+		TreeInfo nearestTree = allTrees[0];
+		float nearestDist = 999999f;
+		
+		for(TreeInfo ti : allTrees) {
+			if(ti.getContainedBullets()>0) {
+				float dist = ra.loc.distanceSquaredTo(ti.location);
+				if(dist < nearestDist) {
+					nearestDist = dist;
+					nearestTree = ti;
+				}
+			}
+		}
+		
+		if(!(nearestTree.getContainedBullets()>0)) {
+			return null;
+		}
+		
+		return(nearestTree);
+	}
+	
 	public TreeInfo findNearestTree(Team team) {
 		TreeInfo[] allTrees = rc.senseNearbyTrees(ra.type.sensorRadius, team);
 		if(allTrees.length ==0) {
@@ -91,12 +116,10 @@ public class ModSensor {
 		float nearestDist = 999999f;
 		
 		for(TreeInfo ti : allTrees) {
-			if(ti.team.equals(team)) {
-				float dist = ra.loc.distanceSquaredTo(ti.location);
-				if(dist < nearestDist) {
-					nearestDist = dist;
-					nearestTree = ti;
-				}
+			float dist = ra.loc.distanceSquaredTo(ti.location);
+			if(dist < nearestDist) {
+				nearestDist = dist;
+				nearestTree = ti;
 			}
 		}
 		

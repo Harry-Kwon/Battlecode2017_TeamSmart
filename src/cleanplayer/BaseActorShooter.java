@@ -4,10 +4,11 @@ import battlecode.common.*;
 
 public class BaseActorShooter extends BaseActor {
 	
+	ModAdvNav nav;
+	
 	public BaseActorShooter(RobotController rc) {
 		super(rc);
 		nav = new ModAdvNav(this, rc);
-		System.out.println(nav.hi());
 	}
 	
 	boolean shootNearestRobot() {
@@ -16,7 +17,7 @@ public class BaseActorShooter extends BaseActor {
 			return false;
 		}
 		
-		if(rc.canFireSingleShot()) {
+		if(rc.canFireSingleShot() && sensor.lineOfSightTo(ri.location)) {
 			try{
 				rc.fireSingleShot(loc.directionTo(ri.location));
 				return true;

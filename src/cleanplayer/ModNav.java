@@ -16,10 +16,6 @@ public class ModNav {
 		decideLeftTurnBias();
 	}
 	
-	String hi() {
-		return("nav");
-	}
-	
 	void decideLeftTurnBias() {
 		if(Math.random()>0.5) {
 			 leftTurnBias = true;
@@ -28,17 +24,18 @@ public class ModNav {
 		}
 	}
 	
-	public void moveInDirection(Direction dir) {
+	public boolean moveInDirection(Direction dir) {
 		if(rc.hasMoved()) {
-			return;
+			return false;
 		}
 		
 		float turnStep = 2f;
 		Direction d = dir;
-		for(int i=0; i<(int)(180f/turnStep); i++) {
+		for(int i=0; i<(int)(360f/turnStep); i++) {
 			Direction right = d.rotateRightDegrees(turnStep*((float) i));
 			Direction left = d.rotateLeftDegrees(turnStep*((float) i));
-			if(leftTurnBias) {
+			
+			/*if(leftTurnBias) {
 				right = d.rotateLeftDegrees(turnStep*((float) i));
 				left = d.rotateRightDegrees(turnStep*((float) i));
 			}
@@ -48,21 +45,21 @@ public class ModNav {
 				try{
 					//System.out.println("moved");
 					rc.move(right);
-					return;
+					return true;
 				} catch(Exception e) {e.printStackTrace();}
 			} else if(rc.canMove(left)) {
 				try{
 					//System.out.println("moved");
 					rc.move(left);
-					return;
+					return true;
 				} catch(Exception e) {e.printStackTrace();}
-			}
+			}*/
 			
-			/*if(rc.canMove(d)) {
+			if(rc.canMove(d)) {
 				try{
 					//System.out.println("moved");
 					rc.move(d);
-					return;
+					return true;
 				} catch(Exception e) {e.printStackTrace();}
 			} else {
 				if(leftTurnBias) {
@@ -70,22 +67,25 @@ public class ModNav {
 				} else {
 					d = d.rotateRightDegrees(turnStep);
 				}
-			}*/
+			}
 		}
+		return false;
 	}
 	
-	public void moveToLocation(MapLocation l) {
+	public boolean moveToLocation(MapLocation l) {
 		if(rc.hasMoved()) {
-			return;
+			return false;
 		}
 		
 		Direction dir = rc.getLocation().directionTo(l);
 		if(rc.canMove(l)) {
 			try{
 				rc.move(l);
+				return true;
 			} catch(Exception e) {e.printStackTrace();}
 		} else {
-			moveInDirection(dir);
+			return(moveInDirection(dir));
 		}
+		return false;
 	}
 }

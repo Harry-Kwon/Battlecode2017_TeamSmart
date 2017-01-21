@@ -17,24 +17,19 @@ public class ActorScout extends BaseActorShooter {
 		shootNearestRobot();
 		
 		//movement
-		idle();
+		move();
 	}
 	
-	public void idle() {
-		MapLocation target = broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
-		if(target!=null) {
-			if(!rc.canSenseLocation(target)) {
-				nav.moveToLocation(target);
-				return;
-			} else {
-				try {
-					broadcast.clearChannel(555);
-					return;
-				} catch (Exception e) {e.printStackTrace();}
-			}
-		}
+	public void move() {
 		
-		super.wander();
+		
+		if(nav.moveToBroadcastChannel()) {
+			//moved to broadcast
+		} else if(nav.moveToNearestFullNeutralTree()) {
+			//moved to nearest neutral tree
+		} else {
+			wander();
+		}
 	}
 	
 	
