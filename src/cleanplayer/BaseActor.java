@@ -45,13 +45,7 @@ public class BaseActor {
 		}
 		updateRoundVars();
 		robotAct();
-		if(type.equals(RobotType.SCOUT)) {
-			System.out.println("STAGE 2 " + Clock.getBytecodeNum());
-			}
 		closeRoundVars();
-		if(type.equals(RobotType.SCOUT)) {
-			System.out.println("STAGE 3 " + Clock.getBytecodeNum());
-			}
 	}
 	
 	public void robotAct() {}
@@ -86,13 +80,7 @@ public class BaseActor {
 	//uses radial binary search based on location fitness scoring function
 	public void wander() {
 		MapLocation target = sensor.findTargetLocation();
-		if(type.equals(RobotType.SCOUT)) {
-			System.out.println("SENSOR " + Clock.getBytecodeNum());
-			}
 		nav.moveToLocation(target);
-		if(type.equals(RobotType.SCOUT)) {
-			System.out.println("MOVE " + Clock.getBytecodeNum());
-			}
 	}
 	
 	//overwrite fitness Score for each child class

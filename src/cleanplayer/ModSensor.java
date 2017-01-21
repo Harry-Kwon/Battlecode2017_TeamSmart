@@ -332,12 +332,25 @@ public class ModSensor {
 
 	boolean lineOfSightTo(MapLocation l) {	
 		float[] vTarget = new float[]{ra.loc.x-l.x, ra.loc.y-l.y};
-		float[] vOrtho = new float[]{-vTarget[1], vTarget[0]}; //orthogonal vector	
+		float magTarget = (float) Math.pow(vTarget[0]*vTarget[0]+vTarget[1]*vTarget[1], 0.5);
+		float[] vOrtho = new float[]{-vTarget[1]/magTarget, vTarget[0]/magTarget}; //orthogonal vector
 			
 		for(RobotInfo ri : ra.allRobots) {
+			if(ri.location.equals(l)) {
+				continue;
+			}
 			float[] vObj = new float[]{ra.loc.x-ri.location.x, ra.loc.y-ri.location.y};	
 			float minDist = Math.abs(vOrtho[0]*vObj[0] + vOrtho[1]*vObj[1]); //projection onto orthogonal vector gives minimum distance to line
 			if(minDist <= ri.getRadius()) {
+				return false;
+			}
+		}
+		
+		for(TreeInfo ti : ra.allTrees) {
+			float[] vObj = new float[]{ra.loc.x-ti.location.x, ra.loc.y-ti.location.y};	
+			float minDist = Math.abs(vOrtho[0]*vObj[0] + vOrtho[1]*vObj[1]); //projection onto orthogonal vector gives minimum distance to line
+			System.out.println(minDist+ ", " + ti.getRadius());
+			if(minDist <= ti.getRadius()) {
 				return false;
 			}
 		}
