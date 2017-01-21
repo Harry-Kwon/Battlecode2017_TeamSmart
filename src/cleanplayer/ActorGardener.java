@@ -14,8 +14,6 @@ public class ActorGardener extends BaseActor {
 	MapLocation anchorLocation;
 	MapLocation lastLocation;
 	
-	boolean builtScout = false;
-	
 	public void robotAct()  {
 		buildUnits();
 		broadcastNearestEnemy();
@@ -63,11 +61,13 @@ public class ActorGardener extends BaseActor {
 
 	boolean buildUnits() {
 		Direction dir = Direction.getEast().rotateRightDegrees(60f);
-		RobotType type = RobotType.LUMBERJACK;
+		RobotType type = RobotType.SOLDIER;
 		
 		//select robot type
-		if(rc.getRoundNum()<200 && !builtScout) {
+		if(rc.getRoundNum()<100) {
 			type = RobotType.SCOUT;
+		} else if(rc.getRoundNum()<200) {
+			type = RobotType.LUMBERJACK;
 		}
 		
 		if(rc.canBuildRobot(type, dir)) {

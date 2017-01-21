@@ -10,17 +10,34 @@ public class ActorScout extends BaseActorShooter {
 	public void robotAct() {
 		//BroadcastArchon
 		
-		//combat
 		//shake
-		shootNearestRobot();
 		shakeTree();
 		
-		//move
-		wander();
-		
 		//combat
-		//shake
+		shootNearestRobot();
+		
+		//movement
+		idle();
 	}
+	
+	public void idle() {
+		MapLocation target = broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
+		if(target!=null) {
+			if(!rc.canSenseLocation(target)) {
+				nav.moveToLocation(target);
+				return;
+			} else {
+				try {
+					broadcast.clearChannel(555);
+					return;
+				} catch (Exception e) {e.printStackTrace();}
+			}
+		}
+		
+		super.wander();
+	}
+	
+	
 	boolean broadcastArchonLoc(){
 		RobotInfo ri = sensor.findNearestBotType(rc.getTeam().opponent(),RobotType.ARCHON);
 		if(ri==null) {
@@ -30,21 +47,6 @@ public class ActorScout extends BaseActorShooter {
 		//potentially add in statement checking repeat broadcast
 		if(broadcast.broadcastLocation(ri.location, 1)) {
 			return true;
-		}
-		return false;
-	}
-	
-	boolean shootNearestRobot() {
-		RobotInfo ri = sensor.findNearestRobot(rc.getTeam().opponent());
-		if(ri==null) {
-			return false;
-		}
-		
-		if(rc.canFireSingleShot()) {
-			try{
-				rc.fireSingleShot(loc.directionTo(ri.location));
-				return true;
-			} catch(Exception e){e.printStackTrace();}
 		}
 		return false;
 	}

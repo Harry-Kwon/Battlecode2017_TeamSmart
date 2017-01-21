@@ -21,21 +21,21 @@ public class RobotPlayer {
                 case SCOUT:
                 	actor = new ActorScout(rc);
                 	break;
-                /*case SOLDIER:
+                case SOLDIER:
                     actor = new ActorSoldier(rc);
                     break;
                 case TANK:
                 	actor = new ActorTank(rc);
-                	break;*/
+                	break;
                 default:
                     actor = new BaseActor(rc);
                     break;
             }
             
             while(true){
-            	if(rc.getTeamBullets() >= GameConstants.VICTORY_POINTS_TO_WIN*GameConstants.BULLET_EXCHANGE_RATE) {
+            	if(rc.getTeamBullets() >= GameConstants.VICTORY_POINTS_TO_WIN*(7.5f + (rc.getRoundNum())*12.5f / 3000f)) {
         			try{
-        				rc.donate(GameConstants.VICTORY_POINTS_TO_WIN*GameConstants.BULLET_EXCHANGE_RATE);
+        				rc.donate(GameConstants.VICTORY_POINTS_TO_WIN*(7.5f + (rc.getRoundNum())*12.5f / 3000f));
         			} catch(Exception e) {e.printStackTrace();}
         		}
             	
