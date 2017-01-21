@@ -284,7 +284,7 @@ public class ModSensor {
 		//System.out.println("RAD" + rad);
 		float scope = 90f;
 		
-		for(int i=0; i<8; i++) {
+		for(int i=0; i<4; i++) {
 			
 			MapLocation D1 = ra.loc.add(angle.rotateRightDegrees(scope), rad);
 			MapLocation D2 = ra.loc.add(angle.rotateLeftDegrees(scope), rad);
@@ -314,7 +314,7 @@ public class ModSensor {
 		float startRange = 0f;
 		float endRange = sensorRange;
 		
-		for(int i=0; i<8; i++) {
+		for(int i=0; i<4; i++) {
 			float startScore = ra.getFitnessScore(ra.loc.add(dir, startRange));
 			float endScore = ra.getFitnessScore(ra.loc.add(dir, endRange));
 			
