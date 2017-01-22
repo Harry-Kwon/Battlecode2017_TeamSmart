@@ -344,7 +344,6 @@ public class ModSensor {
 			float[] vObj = new float[]{ra.loc.x-ri.location.x, ra.loc.y-ri.location.y};	
 			float minDist = Math.abs(vOrtho[0]*vObj[0] + vOrtho[1]*vObj[1]); //projection onto orthogonal vector gives minimum distance to line
 			float parDist = vPar[0]*vObj[0] + vPar[1]*vObj[1]; //projection onto parallel vector to make sure object is in front
-			System.out.println(parDist);
 			if(minDist <= ri.getRadius() && parDist>0) {
 				return false;
 			}
@@ -354,7 +353,6 @@ public class ModSensor {
 			float[] vObj = new float[]{ra.loc.x-ti.location.x, ra.loc.y-ti.location.y};	
 			float minDist = Math.abs(vOrtho[0]*vObj[0] + vOrtho[1]*vObj[1]); //projection onto orthogonal vector gives minimum distance to line
 			float parDist = vPar[0]*vObj[0] + vPar[1]*vObj[1]; //projection onto parallel vector to make sure object is in front
-			System.out.println(parDist);
 			if(minDist <= ti.getRadius() && parDist>0) {
 				return false;
 			}

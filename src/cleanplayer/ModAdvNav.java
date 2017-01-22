@@ -11,6 +11,9 @@ public class ModAdvNav extends ModNav{
 	public boolean moveAroundEnemies() {
 		RobotInfo[] enemies = ra.sensor.findRobotsInRange(ra.team.opponent(), null, ra.sensorRange);
 		float optimalDistSq = 40f;
+		if(ra.type.equals(RobotType.SCOUT)) {
+			optimalDistSq = 100f;
+		}
 		if(enemies.length==0) {
 			return false;
 		}

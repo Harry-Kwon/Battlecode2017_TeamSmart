@@ -56,6 +56,7 @@ public class BaseActor {
 		if(!rc.isBuildReady()) {
 			return;
 		}
+		broadcastNearestEnemy();
 		this.loc = rc.getLocation();
 		indicator.drawIndicatorLine();
 		senseAll();

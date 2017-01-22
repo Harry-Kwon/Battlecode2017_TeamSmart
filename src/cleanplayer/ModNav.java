@@ -32,10 +32,10 @@ public class ModNav {
 		float turnStep = 2f;
 		Direction d = dir;
 		for(int i=0; i<(int)(360f/turnStep); i++) {
-			Direction right = d.rotateRightDegrees(turnStep*((float) i));
+			/*Direction right = d.rotateRightDegrees(turnStep*((float) i));
 			Direction left = d.rotateLeftDegrees(turnStep*((float) i));
 			
-			/*if(leftTurnBias) {
+			if(leftTurnBias) {
 				right = d.rotateLeftDegrees(turnStep*((float) i));
 				left = d.rotateRightDegrees(turnStep*((float) i));
 			}
@@ -55,7 +55,7 @@ public class ModNav {
 				} catch(Exception e) {e.printStackTrace();}
 			}*/
 			
-			if(rc.canMove(d)) {
+			if(rc.canMove(d) && safeToMove(d)) {
 				try{
 					//System.out.println("moved");
 					rc.move(d);
@@ -70,6 +70,18 @@ public class ModNav {
 			}
 		}
 		return false;
+	}
+	
+	//ONLY TAKES BULLETS INTO ACCOUNT
+	public boolean safeToMove(Direction d) {
+		BulletInfo[] bullets = rc.senseNearbyBullets(ra.type.strideRadius+ra.type.bodyRadius);
+		MapLocation simLoc = ra.loc.add(d, ra.type.strideRadius);
+		for(BulletInfo bi : bullets) {
+			if(simLoc.distanceTo(bi.location) < ra.type.bodyRadius) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public boolean moveToLocation(MapLocation l) {
