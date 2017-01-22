@@ -8,6 +8,24 @@ public class ModAdvNav extends ModNav{
 		super(ra, rc);
 	}
 	
+	public boolean moveAroundEnemies() {
+		RobotInfo[] enemies = ra.sensor.findRobotsInRange(ra.team.opponent(), null, ra.sensorRange);
+		float optimalDistSq = 40f;
+		if(enemies.length==0) {
+			return false;
+		}
+		
+		float[] vDir = new float[]{0f, 0f};
+		for(RobotInfo ri : enemies) {
+			float dist = ra.loc.distanceSquaredTo(ri.location);
+			vDir[0] += (ra.loc.x - ri.location.x) * (optimalDistSq-dist);
+			vDir[1] += (ra.loc.y - ri.location.y) * (optimalDistSq-dist);
+		}
+		
+		return(super.moveInDirection(new Direction(vDir[0], vDir[1])));
+		
+	}
+	
 	public boolean moveToNearestFullNeutralTree() {
 		TreeInfo nearestTree = ra.sensor.findNearestFullNeutralTree();
 		if(nearestTree==null) {

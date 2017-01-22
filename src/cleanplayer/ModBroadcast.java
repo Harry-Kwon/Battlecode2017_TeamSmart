@@ -5,6 +5,7 @@ import battlecode.common.*;
 public class ModBroadcast {
 	
 	public static final int ENEMY_SIGHTED_CHANNEL=555;
+	public static final int NEUTRAL_TREE_CHANNEL=400;
 
 	BaseActor ra;
 	RobotController rc;

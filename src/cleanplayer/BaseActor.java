@@ -13,6 +13,7 @@ public class BaseActor {
 	public MapLocation loc;
 	float sensorRange;
 	RobotType type;
+	Team team;
 	
 	public RobotInfo[] allRobots;
 	public TreeInfo[] allTrees;
@@ -30,6 +31,7 @@ public class BaseActor {
 		this.type = rc.getType();
 		this.sensorRange = rc.getType().sensorRadius;
 		this.loc = rc.getLocation();
+		this.team = rc.getTeam();
 		
 		lastLocation = loc;
 		sensor = new ModSensor(this, rc);

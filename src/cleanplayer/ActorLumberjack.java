@@ -108,7 +108,7 @@ public class ActorLumberjack extends BaseActor {
 			return false;
 		}
 		
-		broadcast.broadcastLocation(nearestTree.location, ModBroadcast.ENEMY_SIGHTED_CHANNEL);
+		broadcast.broadcastLocation(nearestTree.location, ModBroadcast.NEUTRAL_TREE_CHANNEL);
 		if(rc.canChop(nearestTree.location)){
 			try{
 				rc.chop(nearestTree.location);

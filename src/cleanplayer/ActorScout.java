@@ -22,11 +22,12 @@ public class ActorScout extends BaseActorShooter {
 	
 	public void move() {
 		
-		
-		if(nav.moveToBroadcastChannel()) {
-			//moved to broadcast
+		if(nav.moveAroundEnemies()	) {
+			//moved around enemies
 		} else if(nav.moveToNearestFullNeutralTree()) {
 			//moved to nearest neutral tree
+		} else if(nav.moveToBroadcastChannel()) {
+			//moved to broadcast
 		} else {
 			wander();
 		}

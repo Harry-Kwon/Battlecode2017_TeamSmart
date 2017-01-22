@@ -66,7 +66,7 @@ public class ActorGardener extends BaseActor {
 		//select robot type
 		if(rc.getRoundNum()<100) {
 			type = RobotType.SCOUT;
-		} else if(rc.getRoundNum()<400) {
+		} else if(rc.getRoundNum()<300) {
 			type = RobotType.LUMBERJACK;
 		}
 		

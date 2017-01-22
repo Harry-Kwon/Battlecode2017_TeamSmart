@@ -18,8 +18,20 @@ public class ActorSoldier extends BaseActorShooter {
 		shootNearestRobot();
 		
 		//movement
-		idle();
+		move();
 	}
+	
+	public void move() {
+		if(nav.moveAroundEnemies()	) {
+			//moved around enemies
+		} else if(nav.moveToBroadcastChannel()) {
+			//moved to broadcast
+		} else {
+			wander();
+		}
+	}
+	
+	
 	
 	public void idle() {
 		MapLocation target = broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
