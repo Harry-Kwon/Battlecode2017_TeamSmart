@@ -22,7 +22,7 @@ public class ActorTank extends BaseActorShooter {
 	}
 	
 	public void idle() {
-		MapLocation target = broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
+		MapLocation target = broadcast.readNearestEnemyBroadcast();
 		if(target!=null) {
 			if(!rc.canSenseLocation(target)) {
 				nav.moveToLocation(target);

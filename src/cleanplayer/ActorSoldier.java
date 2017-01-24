@@ -15,27 +15,22 @@ public class ActorSoldier extends BaseActorShooter {
 		shakeTree();
 		
 		//combat
-		shootNearestRobot();
+		boolean shot = shootNearestRobot();
 		
 		//movement
-		idle();
+		if (shot == false){
+			move();
+		}
 	}
 	
-	public void idle() {
-		MapLocation target = broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
-		if(target!=null) {
-			if(!rc.canSenseLocation(target)) {
-				nav.moveToLocation(target);
-				return;
-			} else {
-				try {
-					broadcast.clearChannel(555);
-					return;
-				} catch (Exception e) {e.printStackTrace();}
-			}
+	public void move() {
+		if(nav.moveAroundEnemies()	) {
+			//moved around enemies
+		} else if(nav.moveToBroadcastChannel()) {
+			//moved to broadcast
+		} else {
+			wander();
 		}
-		
-		super.wander();
 	}
 
 }

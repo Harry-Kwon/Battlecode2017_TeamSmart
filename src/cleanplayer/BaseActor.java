@@ -13,6 +13,7 @@ public class BaseActor {
 	public MapLocation loc;
 	float sensorRange;
 	RobotType type;
+	Team team;
 	
 	public RobotInfo[] allRobots;
 	public TreeInfo[] allTrees;
@@ -30,6 +31,7 @@ public class BaseActor {
 		this.type = rc.getType();
 		this.sensorRange = rc.getType().sensorRadius;
 		this.loc = rc.getLocation();
+		this.team = rc.getTeam();
 		
 		lastLocation = loc;
 		sensor = new ModSensor(this, rc);
@@ -57,6 +59,7 @@ public class BaseActor {
 		this.loc = rc.getLocation();
 		indicator.drawIndicatorLine();
 		senseAll();
+		broadcast.broadcastAllEnemies();
 	}
 	
 	public void closeRoundVars() {
@@ -67,13 +70,6 @@ public class BaseActor {
 	void senseAll() {
 		allRobots = rc.senseNearbyRobots();
 		allTrees = rc.senseNearbyTrees();
-	}
-	
-	//broadcasts
-	void broadcastNearestEnemy() {
-		RobotInfo ri = sensor.findNearestRobot(rc.getTeam().opponent());
-		if(ri==null) { return;}
-		broadcast.broadcastLocation(ri.location, ModBroadcast.ENEMY_SIGHTED_CHANNEL);
 	}
 	
 	//Nav Code
