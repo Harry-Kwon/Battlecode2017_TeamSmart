@@ -91,12 +91,37 @@ public class ModNav {
 		return(moveInDirection(dir));
 	}
 	
+	public boolean wanderToLocation(MapLocation l) {
+		if(rc.hasMoved()) {
+			return false;
+		}
+		//EXPERIMENTAL
+		float angleToLocation = ra.loc.directionTo(l).radians;
+		Direction dirToLast = ra.loc.directionTo(ra.lastLocation);
+		float angleFromLast=0f;
+		if(dirToLast!=null) {
+			angleFromLast = dirToLast.opposite().radians;
+		}
+		Direction dir = new Direction((angleToLocation+angleFromLast)/2f);
+		//END EXPERIMENTAL DIRECTION
+		//OLD PRE-EXPERIMENTAL CODE: Direction dir = ra.loc.directionTo(l);
+		if(rc.canMove(l)) {
+			try{
+				rc.move(l);
+				return true;
+			} catch(Exception e) {e.printStackTrace();}
+		} else {
+			return(moveInDirection(dir));
+		}
+		return false;
+	}
+	
 	public boolean moveToLocation(MapLocation l) {
 		if(rc.hasMoved()) {
 			return false;
 		}
 		
-		Direction dir = rc.getLocation().directionTo(l);
+		Direction dir = ra.loc.directionTo(l);
 		if(rc.canMove(l)) {
 			try{
 				rc.move(l);
