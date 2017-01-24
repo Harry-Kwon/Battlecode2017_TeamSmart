@@ -10,6 +10,7 @@ public class ActorGardener extends BaseActor {
 	}
 	
 	boolean anchored = false;
+	int buildNum = 0;
 	
 	MapLocation anchorLocation;
 	MapLocation lastLocation;
@@ -64,15 +65,16 @@ public class ActorGardener extends BaseActor {
 		RobotType type = RobotType.SOLDIER;
 		
 		//select robot type
-		if(rc.getRoundNum()<100) {
+		if(buildNum==0) {
 			type = RobotType.SCOUT;
-		} else if(rc.getRoundNum()<300) {
+		} else if(buildNum%5==2) {
 			type = RobotType.LUMBERJACK;
 		}
 		
 		if(rc.canBuildRobot(type, dir)) {
 			try{
 				rc.buildRobot(type, dir);
+				buildNum++;
 				return true;
 			} catch(Exception e) {e.printStackTrace();};
 		}
