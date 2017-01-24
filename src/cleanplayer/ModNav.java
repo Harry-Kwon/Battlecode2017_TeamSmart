@@ -84,6 +84,14 @@ public class ModNav {
 		return true;
 	}
 	
+	public boolean moveFromLocation(MapLocation l) {
+		if(rc.hasMoved()) {
+			return false;
+		}
+		Direction dir = rc.getLocation().directionTo(l).opposite();
+		return(moveInDirection(dir));
+	}
+	
 	public boolean moveToLocation(MapLocation l) {
 		if(rc.hasMoved()) {
 			return false;

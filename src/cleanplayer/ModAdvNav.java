@@ -1,6 +1,7 @@
 package cleanplayer;
 
 import battlecode.common.*;
+import battlecode.instrumenter.InstrumentationException.Type;
 
 public class ModAdvNav extends ModNav{
 	
@@ -9,24 +10,21 @@ public class ModAdvNav extends ModNav{
 	}
 	
 	public boolean moveAroundEnemies() {
-		RobotInfo[] enemies = ra.sensor.findRobotsInRange(ra.team.opponent(), null, ra.sensorRange);
-		float optimalDistSq = 40f;
-		if(ra.type.equals(RobotType.SCOUT)) {
-			optimalDistSq = 100f;
-		}
-		if(enemies.length==0) {
+		RobotInfo nearestEnemy = ra.sensor.findNearestRobot(ra.team.opponent());
+		if(nearestEnemy==null) {
 			return false;
 		}
 		
-		float[] vDir = new float[]{0f, 0f};
-		for(RobotInfo ri : enemies) {
-			float dist = ra.loc.distanceSquaredTo(ri.location);
-			vDir[0] += (ra.loc.x - ri.location.x) * (optimalDistSq-dist);
-			vDir[1] += (ra.loc.y - ri.location.y) * (optimalDistSq-dist);
+		float optimalDist = 0;
+		if(nearestEnemy.type.equals(RobotType.LUMBERJACK)) {
+			optimalDist = ra.type.bodyRadius + GameConstants.LUMBERJACK_STRIKE_RADIUS;
 		}
 		
-		return(super.moveInDirection(new Direction(vDir[0], vDir[1])));
-		
+		if(ra.loc.distanceTo(nearestEnemy.location) > optimalDist) {
+			return(super.moveToLocation(nearestEnemy.location));
+		} else {
+			return(super.moveFromLocation(nearestEnemy.location));
+		}
 	}
 	
 	public boolean moveToNearestFullNeutralTree() {
