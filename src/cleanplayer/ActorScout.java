@@ -9,7 +9,7 @@ public class ActorScout extends BaseActorShooter {
 	
 	public void robotAct() {
 		//BroadcastArchon
-		
+		System.out.println("a" + Clock.getBytecodeNum());
 		//shake
 		shakeTree();
 		
@@ -18,6 +18,7 @@ public class ActorScout extends BaseActorShooter {
 		
 		//movement
 		move();
+		System.out.println("b" + Clock.getBytecodeNum());
 	}
 	
 	public void move() {

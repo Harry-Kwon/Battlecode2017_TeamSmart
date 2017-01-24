@@ -59,11 +59,12 @@ public class BaseActor {
 		this.loc = rc.getLocation();
 		indicator.drawIndicatorLine();
 		senseAll();
-		broadcast.broadcastAllEnemies();
 	}
 	
 	public void closeRoundVars() {
 		lastLocation = loc;
+		broadcast.verifyEnemyLocationBroadcasts();
+		broadcast.broadcastAllEnemies();
 	}
 	
 	//sensing

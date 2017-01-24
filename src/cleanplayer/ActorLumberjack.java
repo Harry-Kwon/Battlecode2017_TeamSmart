@@ -129,7 +129,6 @@ public class ActorLumberjack extends BaseActor {
 				return;
 			} else {
 				try {
-					broadcast.clearChannel(555);
 					return;
 				} catch (Exception e) {e.printStackTrace();}
 			}
