@@ -56,10 +56,10 @@ public class BaseActor {
 		if(!rc.isBuildReady()) {
 			return;
 		}
-		broadcast.broadcastAllEnemies();
 		this.loc = rc.getLocation();
 		indicator.drawIndicatorLine();
 		senseAll();
+		broadcast.broadcastAllEnemies();
 	}
 	
 	public void closeRoundVars() {
