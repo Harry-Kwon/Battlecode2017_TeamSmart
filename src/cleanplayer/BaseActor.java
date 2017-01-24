@@ -56,7 +56,7 @@ public class BaseActor {
 		if(!rc.isBuildReady()) {
 			return;
 		}
-		broadcastNearestEnemy();
+		broadcast.broadcastAllEnemies();
 		this.loc = rc.getLocation();
 		indicator.drawIndicatorLine();
 		senseAll();
@@ -70,13 +70,6 @@ public class BaseActor {
 	void senseAll() {
 		allRobots = rc.senseNearbyRobots();
 		allTrees = rc.senseNearbyTrees();
-	}
-	
-	//broadcasts
-	void broadcastNearestEnemy() {
-		RobotInfo ri = sensor.findNearestRobot(rc.getTeam().opponent());
-		if(ri==null) { return;}
-		broadcast.broadcastLocation(ri.location, ModBroadcast.ENEMY_SIGHTED_CHANNEL);
 	}
 	
 	//Nav Code

@@ -54,20 +54,18 @@ public class ModNav {
 					return true;
 				} catch(Exception e) {e.printStackTrace();}
 			}*/
-			
-			if(rc.canMove(d) && safeToMove(d)) {
-				try{
-					//System.out.println("moved");
+			try{
+				if(rc.canMove(d) && safeToMove(d)) {
 					rc.move(d);
 					return true;
-				} catch(Exception e) {e.printStackTrace();}
-			} else {
-				if(leftTurnBias) {
-					d = d.rotateLeftDegrees(turnStep);
 				} else {
-					d = d.rotateRightDegrees(turnStep);
+					if(leftTurnBias) {
+						d = d.rotateLeftDegrees(turnStep);
+					} else {
+						d = d.rotateRightDegrees(turnStep);
+					}
 				}
-			}
+			}catch(Exception e) {e.printStackTrace();}
 		}
 		return false;
 	}

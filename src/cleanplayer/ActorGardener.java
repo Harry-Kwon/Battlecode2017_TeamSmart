@@ -17,7 +17,6 @@ public class ActorGardener extends BaseActor {
 	
 	public void robotAct()  {
 		buildUnits();
-		broadcastNearestEnemy();
 		
 		if(!anchored) {
 			if(tryToAnchor()) {
