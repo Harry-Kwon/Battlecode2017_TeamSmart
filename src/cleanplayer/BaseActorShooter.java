@@ -19,7 +19,8 @@ public class BaseActorShooter extends BaseActor {
 		float friendlyRadius = super.type.bodyRadius;
 		float enemyRadius = ri.getRadius();
 		float distanceToTarget = loc.distanceTo(ri.location) - enemyRadius - friendlyRadius;
-		final float OPTIMAL_SHOT_ANGLE_TRIAD = (float) Math.toRadians(GameConstants.TRIAD_SPREAD_DEGREES);
+		final float TRIAD_MULTIPLIER = 2/3;
+		final float OPTIMAL_SHOT_ANGLE_TRIAD = (float) Math.toRadians(GameConstants.TRIAD_SPREAD_DEGREES * TRIAD_MULTIPLIER);
 		final float OPTIMAL_SHOT_ANGLE_PENTAD = (float) Math.toRadians(GameConstants.PENTAD_SPREAD_DEGREES);
 		float shotAngle = (float) Math.atan(enemyRadius/(distanceToTarget));
 		if(rc.canFirePentadShot() && sensor.lineOfSightTo(ri.location) && shotAngle >= OPTIMAL_SHOT_ANGLE_PENTAD){
