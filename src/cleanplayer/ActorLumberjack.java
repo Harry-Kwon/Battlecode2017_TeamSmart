@@ -29,7 +29,6 @@ public class ActorLumberjack extends BaseActor {
 			return false;
 		}
 		
-		broadcast.broadcastLocation(nearestRobot.location, ModBroadcast.ENEMY_SIGHTED_CHANNEL);
 		if(loc.distanceSquaredTo(nearestRobot.location) < Math.pow(1.5f+nearestRobot.getRadius(), 2)){
 			try{
 				rc.strike();
@@ -55,7 +54,6 @@ public class ActorLumberjack extends BaseActor {
 		}
 		
 		if(!nearestRobot.team.equals(rc.getTeam()) && (nearestRobot.type.equals(RobotType.GARDENER) || nearestRobot.type.equals(RobotType.ARCHON))) {
-			broadcast.broadcastLocation(nearestRobot.location, ModBroadcast.ENEMY_SIGHTED_CHANNEL);
 			//required distance to hit is attack radius
 			if(loc.distanceSquaredTo(nearestRobot.location) < Math.pow(2f+nearestRobot.getRadius(), 2)){
 				try{
@@ -82,7 +80,6 @@ public class ActorLumberjack extends BaseActor {
 			return false;
 		}
 		
-		broadcast.broadcastLocation(nearestTree.location, ModBroadcast.ENEMY_SIGHTED_CHANNEL);
 		if(rc.canChop(nearestTree.location)){
 			try{
 				rc.chop(nearestTree.location);
@@ -125,7 +122,7 @@ public class ActorLumberjack extends BaseActor {
 	}
 	
 	public void idle() {
-		MapLocation target = broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
+		MapLocation target = broadcast.readNearestEnemyBroadcast();
 		if(target!=null) {
 			if(!rc.canSenseLocation(target)) {
 				nav.moveToLocation(target);

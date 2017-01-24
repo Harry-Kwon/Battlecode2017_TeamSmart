@@ -32,24 +32,5 @@ public class ActorSoldier extends BaseActorShooter {
 			wander();
 		}
 	}
-	
-	
-	
-	public void idle() {
-		MapLocation target = broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
-		if(target!=null) {
-			if(!rc.canSenseLocation(target)) {
-				nav.moveToLocation(target);
-				return;
-			} else {
-				try {
-					broadcast.clearChannel(555);
-					return;
-				} catch (Exception e) {e.printStackTrace();}
-			}
-		}
-		
-		super.wander();
-	}
 
 }

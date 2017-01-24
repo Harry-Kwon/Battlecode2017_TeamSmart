@@ -37,7 +37,7 @@ public class ModAdvNav extends ModNav{
 	}
 	
 	public boolean moveToBroadcastChannel() {
-		MapLocation target = ra.broadcast.readBroadcastLocation(ModBroadcast.ENEMY_SIGHTED_CHANNEL);
+		MapLocation target = ra.broadcast.readNearestEnemyBroadcast();
 		if(target==null) {
 			return false;
 		}
