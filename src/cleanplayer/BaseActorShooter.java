@@ -16,12 +16,31 @@ public class BaseActorShooter extends BaseActor {
 		if(ri==null) {
 			return false;
 		}
-		
-		if(rc.canFireSingleShot() && sensor.lineOfSightTo(ri.location)) {
+		float friendlyRadius = super.type.bodyRadius;
+		float enemyRadius = ri.getRadius();
+		float distanceToTarget = loc.distanceTo(ri.location) - enemyRadius - friendlyRadius;
+		final float OPTIMAL_SHOT_ANGLE_TRIAD = (float) Math.toRadians(GameConstants.TRIAD_SPREAD_DEGREES);
+		final float OPTIMAL_SHOT_ANGLE_PENTAD = (float) Math.toRadians(GameConstants.PENTAD_SPREAD_DEGREES);
+		float shotAngle = (float) Math.atan(enemyRadius/(distanceToTarget));
+		if(rc.canFirePentadShot() && sensor.lineOfSightTo(ri.location) && shotAngle >= OPTIMAL_SHOT_ANGLE_PENTAD){
 			try{
-				rc.fireSingleShot(loc.directionTo(ri.location));
+				rc.firePentadShot(loc.directionTo(ri.location));
 				return true;
 			} catch(Exception e){e.printStackTrace();}
+		}
+		else if(rc.canFireTriadShot() && sensor.lineOfSightTo(ri.location) && shotAngle >= OPTIMAL_SHOT_ANGLE_TRIAD){
+			try{
+				rc.fireTriadShot(loc.directionTo(ri.location));
+				return true;
+			} catch(Exception e){e.printStackTrace();}
+		}
+		else{
+			if(rc.canFireSingleShot() && sensor.lineOfSightTo(ri.location)) {
+				try{
+					rc.fireSingleShot(loc.directionTo(ri.location));
+					return true;
+				} catch(Exception e){e.printStackTrace();}
+			}
 		}
 		return false;
 	}
