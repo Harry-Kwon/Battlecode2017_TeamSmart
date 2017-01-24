@@ -24,12 +24,13 @@ public class ActorSoldier extends BaseActorShooter {
 	}
 	
 	public void move() {
-		if(nav.moveAroundEnemies()	) {
-			//moved around enemies
+		if(nav.moveAroundEnemies()) {
+			rc.setIndicatorDot(loc, 0, 255, 0);
 		} else if(nav.moveToBroadcastChannel()) {
-			//moved to broadcast
+			rc.setIndicatorDot(loc, 0, 0, 255);
 		} else {
 			wander();
+			rc.setIndicatorDot(loc, 255, 0, 0);
 		}
 	}
 

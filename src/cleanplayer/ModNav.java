@@ -55,7 +55,8 @@ public class ModNav {
 				} catch(Exception e) {e.printStackTrace();}
 			}*/
 			try{
-				if(rc.canMove(d) && safeToMove(d)) {
+				MapLocation simLoc = ra.loc.add(d);
+				if(rc.canMove(simLoc)&&rc.canMove(d) && safeToMove(d)) {
 					rc.move(d);
 					return true;
 				} else {
@@ -65,7 +66,7 @@ public class ModNav {
 						d = d.rotateRightDegrees(turnStep);
 					}
 				}
-			}catch(Exception e) {e.printStackTrace();}
+			}catch(Exception e) {/*e.printStackTrace();*/}
 		}
 		return false;
 	}

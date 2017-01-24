@@ -1,15 +1,18 @@
 package cleanplayer;
 
+import java.util.ArrayList;
+
 import battlecode.common.*;
 
 public class ModBroadcast {
 	
 	public static final int ENEMY_SIGHTED_CHANNEL_START=1000;
-	public static final int ENEMY_SIGHTED_CHANNELS = 100;
+	public static final int ENEMY_SIGHTED_CHANNELS = 10;
 	public static final int NEUTRAL_TREE_CHANNEL=400;
 
 	BaseActor ra;
 	RobotController rc;
+	ArrayList<MapLocation> enemyLocations = new ArrayList<MapLocation>(0);
 	
 	
 	public ModBroadcast(BaseActor ra, RobotController rc) {
@@ -17,14 +20,40 @@ public class ModBroadcast {
 		this.rc = rc;
 	}
 	
+	public void verifyEnemyLocationBroadcasts() {
+		int start = ModBroadcast.ENEMY_SIGHTED_CHANNEL_START;
+		int num = ModBroadcast.ENEMY_SIGHTED_CHANNELS;
+		enemyLocations.clear();
+		for(int i = start; i < start+num; i++) {
+			MapLocation l = readBroadcastLocation(start+i);
+			if(l==null) {
+				continue;
+			}
+
+			if(rc.canSenseLocation(l)) {
+				try{
+					RobotInfo ri = rc.senseRobotAtLocation(l);
+					if(ri==null || ri.team==ra.team) {
+						clearChannel(start+i);
+					} else if(!enemyLocations.contains(l)){
+						enemyLocations.add(l);
+					}
+				} catch(Exception e){e.printStackTrace();}
+			} else if(!enemyLocations.contains(l)) {
+				enemyLocations.add(l);
+			}
+		}
+	}
+	
 	public void broadcastAllEnemies() {
-		RobotInfo[] enemies = ra.sensor.findRobotsInRange(ra.team.opponent(), null, ra.sensorRange);
+		RobotInfo[] enemies = rc.senseNearbyRobots(ra.sensorRange, ra.team.opponent());
 		if(enemies.length==0) {
 			return;
 		}
-		for(RobotInfo ri : ra.allRobots) {
+		
+		for(RobotInfo ri : enemies) {
 			int channel = nextOpenChannel(ModBroadcast.ENEMY_SIGHTED_CHANNEL_START, ModBroadcast.ENEMY_SIGHTED_CHANNELS);
-			if(channel==-1) {
+			if(channel==-1 || enemyLocations.contains(ri.location)) {
 				return;
 			}
 			try{
@@ -34,15 +63,9 @@ public class ModBroadcast {
 	}
 	
 	public MapLocation readNearestEnemyBroadcast() {
-		int start = ModBroadcast.ENEMY_SIGHTED_CHANNEL_START;
-		int num = ModBroadcast.ENEMY_SIGHTED_CHANNELS;
-		MapLocation bestLocation=null;
-		float bestDist = 9999999f;
-		for(int i = start; i < start+num; i++) {
-			MapLocation l = readBroadcastLocation(start+i);
-			if(l==null) {
-				continue;
-			}
+		float bestDist = 9999999;
+		MapLocation bestLocation = null;
+		for(MapLocation l : enemyLocations) {
 			float dist = ra.loc.distanceTo(l);
 			if(dist < bestDist) {
 				bestLocation = l;
