@@ -15,10 +15,12 @@ public class ActorSoldier extends BaseActorShooter {
 		shakeTree();
 		
 		//combat
-		shootNearestRobot();
+		boolean shot = shootNearestRobot();
 		
 		//movement
-		move();
+		if (shot == false){
+			move();
+		}
 	}
 	
 	public void move() {
