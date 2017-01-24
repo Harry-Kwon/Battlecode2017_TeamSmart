@@ -19,6 +19,9 @@ public class ModBroadcast {
 	
 	public void broadcastAllEnemies() {
 		RobotInfo[] enemies = ra.sensor.findRobotsInRange(ra.team.opponent(), null, ra.sensorRange);
+		if(enemies.length==0) {
+			return;
+		}
 		for(RobotInfo ri : ra.allRobots) {
 			int channel = nextOpenChannel(ModBroadcast.ENEMY_SIGHTED_CHANNEL_START, ModBroadcast.ENEMY_SIGHTED_CHANNELS);
 			if(channel==-1) {
