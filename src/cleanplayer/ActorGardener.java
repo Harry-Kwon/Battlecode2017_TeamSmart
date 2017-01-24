@@ -65,8 +65,8 @@ public class ActorGardener extends BaseActor {
 		
 		//select robot type
 		if(buildNum==0) {
-			type = RobotType.SCOUT;
-		} else if(buildNum%5==2) {
+			//type = RobotType.SCOUT;
+		} else if(buildNum%5==1) {
 			type = RobotType.LUMBERJACK;
 		}
 		

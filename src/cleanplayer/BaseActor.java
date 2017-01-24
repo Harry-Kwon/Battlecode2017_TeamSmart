@@ -21,6 +21,8 @@ public class BaseActor {
 	
 	boolean leftTurnBias = false;
 	
+	String fitnessMode = "wander";
+	
 	public BaseActor(RobotController rc){
 		initializeActor(rc);
 	}
@@ -75,9 +77,9 @@ public class BaseActor {
 	
 	//Nav Code
 	//uses radial binary search based on location fitness scoring function
-	public void wander() {
+	public boolean wander() {
 		MapLocation target = sensor.findTargetLocation();
-		nav.moveToLocation(target);
+		return(nav.moveToLocation(target));
 	}
 	
 	//overwrite fitness Score for each child class
