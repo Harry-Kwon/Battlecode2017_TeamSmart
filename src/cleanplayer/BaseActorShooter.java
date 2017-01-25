@@ -24,11 +24,11 @@ public class BaseActorShooter extends BaseActor {
 		}
 		float friendlyRadius = super.type.bodyRadius;
 		float enemyRadius = ri.getRadius();
-		float distanceToTarget = loc.distanceTo(ri.location) - enemyRadius - friendlyRadius;
-		final float TRIAD_MULTIPLIER = 2f/3f;
+		float distanceToTarget = loc.distanceTo(ri.location) - GameConstants.BULLET_SPAWN_OFFSET - friendlyRadius;
+		final float TRIAD_MULTIPLIER = 1f;
 		final float OPTIMAL_SHOT_ANGLE_TRIAD = (float) Math.toRadians(GameConstants.TRIAD_SPREAD_DEGREES * TRIAD_MULTIPLIER);
-		final float OPTIMAL_SHOT_ANGLE_PENTAD = (float) Math.toRadians(GameConstants.PENTAD_SPREAD_DEGREES * 2);
-		float shotAngle = (float) Math.atan(enemyRadius/(distanceToTarget));
+		final float OPTIMAL_SHOT_ANGLE_PENTAD = (float) Math.toRadians(GameConstants.PENTAD_SPREAD_DEGREES * 2f);
+		float shotAngle = (float) Math.asin(enemyRadius/distanceToTarget);
 		if(rc.canFirePentadShot() && sensor.lineOfSightTo(ri.location) && shotAngle >= OPTIMAL_SHOT_ANGLE_PENTAD){
 			try{
 				rc.firePentadShot(loc.directionTo(ri.location));

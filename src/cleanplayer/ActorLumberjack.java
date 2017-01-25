@@ -11,9 +11,9 @@ public class ActorLumberjack extends BaseActor {
 	public void robotAct() {	
 		if(attackEnemyUnits()){
 			//System.out.println("attack");
-		} else if(attackEnemyWorkers()) {
-			//System.out.println("cut enemy trees");
 		} else if(cutEnemyTrees()) {
+			//System.out.println("cut enemy trees");
+		} else if(attackEnemyWorkers()) {
 			//System.out.println("attack workers");
 		} else if(cutTrees()) {
 			//System.out.println("cut trees");

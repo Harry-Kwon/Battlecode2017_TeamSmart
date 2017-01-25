@@ -26,8 +26,9 @@ public class ActorGardener extends BaseActor {
 				wander();
 			}
 		} else {
-			buildUnits();
-			plantTrees();
+			if(sensor.findNearestRobot(team.opponent()) == null || rc.getTeamBullets()>100) {
+				plantTrees();
+			}
 			waterTrees();
 		}
 	}

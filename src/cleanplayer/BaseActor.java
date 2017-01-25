@@ -61,6 +61,7 @@ public class BaseActor {
 		this.loc = rc.getLocation();
 		indicator.drawIndicatorLine();
 		senseAll();
+		shakeTree();
 	}
 	
 	public void closeRoundVars() {
@@ -96,11 +97,14 @@ public class BaseActor {
 		for(RobotInfo ri : allRobots) {
 			fitness -= 1f/l.distanceSquaredTo(ri.location);
 		}
-		for(TreeInfo ti : allTrees) {
-			if(ti.team.equals(Team.NEUTRAL)) {
-				fitness -= 1f/l.distanceSquaredTo(ti.location);
+		if(type.equals(RobotType.GARDENER)) {
+			for(TreeInfo ti : allTrees) {
+				if(ti.team.equals(Team.NEUTRAL)) {
+					fitness -= 1f/l.distanceSquaredTo(ti.location);
+				}
 			}
 		}
+		
 		
 		fitness -= 10f/l.distanceSquaredTo(lastLocation);
 		

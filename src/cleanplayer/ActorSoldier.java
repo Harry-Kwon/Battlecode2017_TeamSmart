@@ -13,9 +13,6 @@ public class ActorSoldier extends BaseActorShooter {
 	public void robotAct() {
 		//BroadcastArchon
 		
-		//shake
-		shakeTree();
-		
 		//combat
 		shot = shootNearestRobot();
 		
@@ -42,7 +39,7 @@ public class ActorSoldier extends BaseActorShooter {
 		if(fitnessMode.equals("wander")) {
 			fitness = super.getFitnessScore(l);
 		} else if(fitnessMode.equals("toBroadcast")) {
-			float targetBias = 5.0f;
+			float targetBias = 20.0f;
 			fitness -= 1f/l.distanceSquaredTo(lastLocation);
 			fitness += targetBias * 1f/loc.distanceSquaredTo(l);
 		}

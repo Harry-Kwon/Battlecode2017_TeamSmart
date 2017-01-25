@@ -9,9 +9,14 @@ public class ActorArchon extends BaseActor {
 	}
 	
 	public void robotAct() {
-		if(rc.getRoundNum()%20==1) {
+		if(rc.getRoundNum()%20==0 || rc.getTeamBullets()>200) {
 			buildGardener();
 		}
+		wiggle();
+	}
+	
+	void wiggle() {
+		nav.moveInDirection(new Direction((float) (Math.random()*Math.PI*2f)));
 	}
 	
 	boolean buildGardener() {
