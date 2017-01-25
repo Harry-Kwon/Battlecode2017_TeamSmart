@@ -10,21 +10,32 @@ public class ModAdvNav extends ModNav{
 	}
 	
 	public boolean moveAroundEnemies() {
-		RobotInfo nearestEnemy = ra.sensor.findNearestRobot(ra.team.opponent());
-		if(nearestEnemy==null) {
+		//return true;
+		RobotInfo targetRi = ra.sensor.findShootingTarget();
+		if(targetRi==null) {
 			return false;
 		}
 		
-		float optimalDist = 0;
-		if(nearestEnemy.type.equals(RobotType.LUMBERJACK)) {
-			optimalDist = ra.type.bodyRadius + GameConstants.LUMBERJACK_STRIKE_RADIUS;
+		Direction dir = ra.loc.directionTo(targetRi.location);
+		//default
+		if(leftTurnBias) {
+			dir.rotateLeftDegrees(90f);
+		} else {
+			dir.rotateRightDegrees(90f);
 		}
 		
-		if(ra.loc.distanceTo(nearestEnemy.location) > optimalDist) {
-			return(super.moveToLocation(nearestEnemy.location));
-		} else {
-			return(super.moveFromLocation(nearestEnemy.location));
+		if(!rc.canMove(dir) && safeToMove(dir)) {
+			dir.rotateLeftDegrees(180f);
 		}
+		
+		//around gardener
+		if(targetRi.type.equals(RobotType.GARDENER)) {
+			if(ra.sensor.lineOfSightTo(targetRi.location)) {
+				dir=null;
+			}
+		}
+		
+		return(moveInDirection(dir));
 	}
 	
 	public boolean moveToNearestFullNeutralTree() {

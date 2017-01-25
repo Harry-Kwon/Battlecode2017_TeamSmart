@@ -17,9 +17,7 @@ public class ActorSoldier extends BaseActorShooter {
 		shot = shootNearestRobot();
 		
 		//movement
-		if(!shot) {
-			move();
-		}
+		move();
 	}
 	
 	public void move() {
@@ -40,8 +38,8 @@ public class ActorSoldier extends BaseActorShooter {
 			fitness = super.getFitnessScore(l);
 		} else if(fitnessMode.equals("toBroadcast")) {
 			float targetBias = 20.0f;
-			fitness -= 1f/l.distanceSquaredTo(lastLocation);
-			fitness += targetBias * 1f/loc.distanceSquaredTo(l);
+			fitness -= 1f/l.distanceTo(lastLocation);
+			fitness += targetBias * 1f/loc.distanceTo(l);
 		}
 		return fitness;
 	}

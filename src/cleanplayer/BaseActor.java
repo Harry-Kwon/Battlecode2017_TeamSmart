@@ -15,6 +15,8 @@ public class BaseActor {
 	RobotType type;
 	Team team;
 	
+	public boolean shot = false;
+	
 	public RobotInfo[] allRobots;
 	public TreeInfo[] allTrees;
 	public MapLocation lastLocation;

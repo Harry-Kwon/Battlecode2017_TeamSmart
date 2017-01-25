@@ -5,7 +5,6 @@ import battlecode.common.*;
 public class BaseActorShooter extends BaseActor {
 	
 	ModAdvNav nav;
-	boolean shot = false;
 	
 	public BaseActorShooter(RobotController rc) {
 		super(rc);

@@ -25,7 +25,7 @@ public class ModNav {
 	}
 	
 	public boolean moveInDirection(Direction dir) {
-		if(rc.hasMoved()) {
+		if(rc.hasMoved() || dir==null) {
 			return false;
 		}
 		
@@ -73,7 +73,7 @@ public class ModNav {
 	
 	//ONLY TAKES BULLETS INTO ACCOUNT
 	public boolean safeToMove(Direction d) {
-		BulletInfo[] bullets = rc.senseNearbyBullets(ra.type.strideRadius+ra.type.bodyRadius);
+		BulletInfo[] bullets = rc.senseNearbyBullets();
 		MapLocation simLoc = ra.loc.add(d, ra.type.strideRadius);
 		for(BulletInfo bi : bullets) {
 			if(simLoc.distanceTo(bi.location) < ra.type.bodyRadius) {
