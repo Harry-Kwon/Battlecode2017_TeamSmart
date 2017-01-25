@@ -36,10 +36,26 @@ public class ActorGardener extends BaseActor {
 	/*
 	attempts to anchor and returns true if successful */
 	boolean tryToAnchor() {
-		RobotInfo[] smallRobots;
-		TreeInfo[] smallTrees;
 		
 		try{
+			
+			for(RobotInfo ri : allRobots) {
+				if(ri.team.equals(team)){
+					if(ri.type.equals(RobotType.ARCHON)) {
+						if(loc.distanceTo(ri.location) < type.bodyRadius + 2f + ri.getRadius()) {
+							return false;
+						}
+					}
+					if(ri.type.equals(RobotType.GARDENER)) {
+						if(loc.distanceTo(ri.location) < type.bodyRadius*2f + 2f + GameConstants.BULLET_TREE_RADIUS*2f*2f){
+							return false;
+						}
+					}
+				}
+			}
+			
+			/*RobotInfo[] smallRobots;
+			TreeInfo[] smallTrees;
 			smallRobots = rc.senseNearbyRobots(4.1f);
 			smallTrees = rc.senseNearbyTrees(6.1f);
 			
@@ -51,7 +67,7 @@ public class ActorGardener extends BaseActor {
 				if(!ti.team.equals(Team.NEUTRAL)) {
 					return false;
 				}
-			}
+			}*/
 		} catch(Exception e) {e.printStackTrace();}
 		
 		return true;
