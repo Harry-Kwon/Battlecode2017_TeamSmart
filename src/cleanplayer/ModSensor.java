@@ -342,7 +342,8 @@ public class ModSensor {
 		return target;
 	}
 
-	boolean lineOfSightTo(MapLocation l) {	
+	boolean lineOfSightTo(MapLocation l) {
+		float dist = ra.loc.distanceTo(l); //should be equal to magTarget
 		float[] vTarget = new float[]{ra.loc.x-l.x, ra.loc.y-l.y};
 		float magTarget = (float) Math.pow(vTarget[0]*vTarget[0]+vTarget[1]*vTarget[1], 0.5);
 		float[] vOrtho = new float[]{-vTarget[1]/magTarget, vTarget[0]/magTarget}; //orthogonal vector
@@ -355,7 +356,7 @@ public class ModSensor {
 			float[] vObj = new float[]{ra.loc.x-ri.location.x, ra.loc.y-ri.location.y};	
 			float minDist = Math.abs(vOrtho[0]*vObj[0] + vOrtho[1]*vObj[1]); //projection onto orthogonal vector gives minimum distance to line
 			float parDist = vPar[0]*vObj[0] + vPar[1]*vObj[1]; //projection onto parallel vector to make sure object is in front
-			if(minDist <= ri.getRadius() && parDist>0) {
+			if(minDist <= ri.getRadius() && parDist>0 && parDist<dist) {
 				return false;
 			}
 		}
@@ -364,7 +365,7 @@ public class ModSensor {
 			float[] vObj = new float[]{ra.loc.x-ti.location.x, ra.loc.y-ti.location.y};	
 			float minDist = Math.abs(vOrtho[0]*vObj[0] + vOrtho[1]*vObj[1]); //projection onto orthogonal vector gives minimum distance to line
 			float parDist = vPar[0]*vObj[0] + vPar[1]*vObj[1]; //projection onto parallel vector to make sure object is in front
-			if(minDist <= ti.getRadius() && parDist>0) {
+			if(minDist <= ti.getRadius() && parDist>0 && parDist<dist) {
 				return false;
 			}
 		}

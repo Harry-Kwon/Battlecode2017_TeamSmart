@@ -8,6 +8,7 @@ public class BaseActor {
 	ModNav nav;
 	ModIndicator indicator;
 	ModBroadcast broadcast;
+	ModMemory memory;
 	
 	public RobotController rc;
 	public MapLocation loc;
@@ -42,6 +43,7 @@ public class BaseActor {
 		nav = new ModNav(this, rc);
 		broadcast = new ModBroadcast(this, rc);
 		indicator = new ModIndicator(this, rc);
+		memory = new ModMemory(this, rc);
 	}
 	
 	//round actions
