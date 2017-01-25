@@ -77,9 +77,7 @@ public class ActorGardener extends BaseActor {
 	attempts to build units and returns true if successful*/
 
 	boolean buildUnits() {
-		Direction dir = Direction.getEast().rotateRightDegrees(60f);
 		RobotType type = RobotType.SOLDIER;
-		
 		//select robot type
 		if(buildNum==0) {
 			//type = RobotType.SCOUT;
@@ -87,13 +85,22 @@ public class ActorGardener extends BaseActor {
 			type = RobotType.LUMBERJACK;
 		}
 		
-		if(rc.canBuildRobot(type, dir)) {
-			try{
-				rc.buildRobot(type, dir);
-				buildNum++;
-				return true;
-			} catch(Exception e) {e.printStackTrace();};
+		Direction dir = Direction.getWest();
+		float rotationStep = 30;
+		
+		for(int i=0; i<((int) 360f/rotationStep); i++){
+			if(rc.canBuildRobot(type, dir)) {
+				try{
+					rc.buildRobot(type, dir);
+					buildNum++;
+					return true;
+				} catch(Exception e) {e.printStackTrace();};
+			}else {
+				dir = dir.rotateLeftDegrees(rotationStep);
+			}
 		}
+		
+		
 		
 		return false;
 	}
@@ -102,11 +109,20 @@ public class ActorGardener extends BaseActor {
 	boolean plantTrees() {
 		Direction dir = Direction.getEast();
 		boolean planted = false;
-		float rotationStep = 60f;
+		float rotationStep = 30f;
 		
-		for(int i=0; i<((int) 360f/rotationStep)-1; i++){
+		boolean found = false;
+		
+		for(int i=0; i<((int) 360f/rotationStep); i++){
 			
 			if(rc.canPlantTree(dir)) {
+				if(!found) {
+					found=true;
+					dir.rotateLeftDegrees(60f);
+					i+=60f/rotationStep;
+					continue;
+				}
+				
 				try{ 
 					rc.plantTree(dir);
 					planted = true;

@@ -3,7 +3,9 @@ package cleanplayer;
 import battlecode.common.*;
 
 public class ActorTank extends BaseActorShooter {
-
+	
+	String fitnessMode = "wander";
+	
 	public ActorTank(RobotController rc) {
 		super(rc);
 	}
@@ -11,30 +13,35 @@ public class ActorTank extends BaseActorShooter {
 	public void robotAct() {
 		//BroadcastArchon
 		
-		//shake
-		shakeTree();
-		
 		//combat
-		shootNearestRobot();
+		shot = shootNearestRobot();
 		
 		//movement
-		idle();
+		move();
 	}
 	
-	public void idle() {
-		MapLocation target = broadcast.readNearestEnemyBroadcast();
-		if(target!=null) {
-			if(!rc.canSenseLocation(target)) {
-				nav.moveToLocation(target);
-				return;
-			} else {
-				try {
-					broadcast.clearChannel(555);
-					return;
-				} catch (Exception e) {e.printStackTrace();}
-			}
+	public void move() {
+		if(nav.moveAroundEnemies()) {
+			rc.setIndicatorDot(loc, 0, 255, 0);
+		} else if(nav.moveToBroadcastChannel()) {
+			rc.setIndicatorDot(loc, 0, 0, 255);
+		} else {
+			fitnessMode="wander";
+			wander();
+			rc.setIndicatorDot(loc, 255, 0, 0);
 		}
-		
-		super.wander();
 	}
+	
+	float getFitnessScore(MapLocation l) {
+		float fitness = 0f;
+		if(fitnessMode.equals("wander")) {
+			fitness = super.getFitnessScore(l);
+		} else if(fitnessMode.equals("toBroadcast")) {
+			float targetBias = 20.0f;
+			fitness -= 1f/l.distanceTo(lastLocation);
+			fitness += targetBias * 1f/loc.distanceTo(l);
+		}
+		return fitness;
+	}
+
 }

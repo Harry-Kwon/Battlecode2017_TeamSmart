@@ -29,7 +29,7 @@ public class ModNav {
 			return false;
 		}
 		
-		float turnStep = 2f;
+		float turnStep = 10f;
 		Direction d = dir;
 		for(int i=0; i<(int)(360f/turnStep); i++) {
 			/*Direction right = d.rotateRightDegrees(turnStep*((float) i));
