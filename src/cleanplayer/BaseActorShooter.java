@@ -18,7 +18,7 @@ public class BaseActorShooter extends BaseActor {
 	}
 	
 	boolean shootNearestRobot() {
-		RobotInfo ri = sensor.findNearestRobot(rc.getTeam().opponent());
+		RobotInfo ri = sensor.findShootingTarget();
 		if(ri==null) {
 			return false;
 		}

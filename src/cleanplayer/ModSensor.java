@@ -147,6 +147,17 @@ public class ModSensor {
 		return(nearestRobot);
 	}
 	
+	public RobotInfo findShootingTarget() {
+		RobotInfo ri = findNearestAttacker(ra.team.opponent());
+		if(ri==null) {
+			ri=findNearestBotType(ra.team.opponent(), RobotType.GARDENER);
+		}
+		if(ri==null) {
+			ri=findNearestBotType(ra.team.opponent(), RobotType.ARCHON);
+		}
+		return ri;
+	}
+	
 	//gets nearest non-gardener or archon robot in sensor range
 	public RobotInfo findNearestAttacker(Team team) {
 		RobotInfo[] allRobots = rc.senseNearbyRobots(ra.type.sensorRadius, team);
