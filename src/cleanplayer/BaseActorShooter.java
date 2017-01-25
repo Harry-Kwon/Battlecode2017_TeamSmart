@@ -36,7 +36,8 @@ public class BaseActorShooter extends BaseActor {
 
 		float friendlyRadius = super.type.bodyRadius;
 		float enemyRadius = ri.getRadius();
-		float distanceToTarget = loc.distanceTo(ri.location) - GameConstants.BULLET_SPAWN_OFFSET - friendlyRadius;
+		float paddingFactor = 1f;
+		float distanceToTarget = loc.distanceTo(ri.location) - GameConstants.BULLET_SPAWN_OFFSET - friendlyRadius - paddingFactor;
 		final float TRIAD_MULTIPLIER = 1f;
 		final float OPTIMAL_SHOT_ANGLE_TRIAD = (float) Math.toRadians(GameConstants.TRIAD_SPREAD_DEGREES * TRIAD_MULTIPLIER);
 		final float OPTIMAL_SHOT_ANGLE_PENTAD = (float) Math.toRadians(GameConstants.PENTAD_SPREAD_DEGREES * 2f);
