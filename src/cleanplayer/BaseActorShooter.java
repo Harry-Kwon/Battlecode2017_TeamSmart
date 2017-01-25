@@ -5,10 +5,16 @@ import battlecode.common.*;
 public class BaseActorShooter extends BaseActor {
 	
 	ModAdvNav nav;
+	boolean shot = false;
 	
 	public BaseActorShooter(RobotController rc) {
 		super(rc);
 		nav = new ModAdvNav(this, rc);
+	}
+	
+	public void updateRoundVars() {
+		super.updateRoundVars();
+		shot = false;
 	}
 	
 	boolean shootNearestRobot() {
