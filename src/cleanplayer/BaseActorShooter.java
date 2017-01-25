@@ -42,20 +42,20 @@ public class BaseActorShooter extends BaseActor {
 		final float OPTIMAL_SHOT_ANGLE_TRIAD = (float) Math.toRadians(GameConstants.TRIAD_SPREAD_DEGREES * TRIAD_MULTIPLIER);
 		final float OPTIMAL_SHOT_ANGLE_PENTAD = (float) Math.toRadians(GameConstants.PENTAD_SPREAD_DEGREES * 2f);
 		float shotAngle = (float) Math.asin(enemyRadius/distanceToTarget);
-		if(rc.canFirePentadShot() && sensor.lineOfSightTo(targetLoc) && shotAngle >= OPTIMAL_SHOT_ANGLE_PENTAD){
+		if(rc.canFirePentadShot() && sensor.lineOfSightTo(targetLoc, ri.ID) && shotAngle >= OPTIMAL_SHOT_ANGLE_PENTAD){
 			try{
 				rc.firePentadShot(loc.directionTo(targetLoc));
 				return true;
 			} catch(Exception e){e.printStackTrace();}
 		}
-		else if(rc.canFireTriadShot() && sensor.lineOfSightTo(targetLoc) && shotAngle >= OPTIMAL_SHOT_ANGLE_TRIAD){
+		else if(rc.canFireTriadShot() && sensor.lineOfSightTo(targetLoc, ri.ID) && shotAngle >= OPTIMAL_SHOT_ANGLE_TRIAD){
 			try{
 				rc.fireTriadShot(loc.directionTo(targetLoc));
 				return true;
 			} catch(Exception e){e.printStackTrace();}
 		}
 		else{
-			if(rc.canFireSingleShot() && sensor.lineOfSightTo(targetLoc)) {
+			if(rc.canFireSingleShot() && sensor.lineOfSightTo(targetLoc, ri.ID)) {
 				try{
 					rc.fireSingleShot(loc.directionTo(targetLoc));
 					return true;

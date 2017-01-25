@@ -30,7 +30,7 @@ public class ModAdvNav extends ModNav{
 		
 		//around gardener
 		if(targetRi.type.equals(RobotType.GARDENER)) {
-			if(ra.sensor.lineOfSightTo(targetRi.location)) {
+			if(ra.sensor.lineOfSightTo(targetRi.location, targetRi.ID)) {
 				dir=null;
 			}
 		}

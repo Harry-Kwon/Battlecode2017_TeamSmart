@@ -342,7 +342,7 @@ public class ModSensor {
 		return target;
 	}
 
-	boolean lineOfSightTo(MapLocation l) {
+	boolean lineOfSightTo(MapLocation l, int ignoreID) {
 		float dist = ra.loc.distanceTo(l); //should be equal to magTarget
 		float[] vTarget = new float[]{ra.loc.x-l.x, ra.loc.y-l.y};
 		float magTarget = (float) Math.pow(vTarget[0]*vTarget[0]+vTarget[1]*vTarget[1], 0.5);
@@ -350,7 +350,7 @@ public class ModSensor {
 		float[] vPar = new float[]{vTarget[0]/magTarget, vTarget[1]/magTarget}; //parallel vector
 			
 		for(RobotInfo ri : ra.allRobots) {
-			if(ri.location.equals(l)) {
+			if(ri.location.equals(l) || ri.ID==ignoreID) {
 				continue;
 			}
 			float[] vObj = new float[]{ra.loc.x-ri.location.x, ra.loc.y-ri.location.y};	
